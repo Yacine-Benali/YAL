@@ -1,0 +1,38 @@
+program testGrammar
+
+function sum(a: int, b: int) : int
+begin
+    x := a + b;
+    result := x;
+end
+
+procedure showMessage(msg: string)
+begin
+    print(msg);
+end
+
+var x, y: int;
+message: string;
+begin
+
+    x := 10;
+    y := 20;
+    z := sum(x, y);
+
+    if z > 15 then
+        begin
+            message := "Sum is greater than 15";
+        end
+    else
+        begin
+            message := "Sum is 15 or less";
+        end
+
+    showMessage(message);
+
+    while x > 0 do
+        begin
+            x := x - 1;
+        end
+end
+END

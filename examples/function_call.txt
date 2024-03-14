@@ -1,0 +1,5 @@
+program numberguess
+    begin
+        x := f(a,"string", 5, g()) ;
+    end
+END
