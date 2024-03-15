@@ -30,24 +30,17 @@ public interface MyGrammarTreeConstants
   public int JJTIDENTIFIER = 24;
   public int JJTVARIABLEIDENTIFIER = 25;
   public int JJTEXPRESSION = 26;
-  public int JJTARTHEXP = 27;
-  public int JJTARTHEXPPRIME = 28;
-  public int JJTARTHTERM = 29;
-  public int JJTARTHTERMPRIME = 30;
-  public int JJTARTHFACTOR = 31;
-  public int JJTNUMVALUE = 32;
-  public int JJTNUMBER = 33;
-  public int JJTBOOLEXP = 34;
-  public int JJTBOOLEXPPRIME = 35;
-  public int JJTBOOLTERM = 36;
-  public int JJTBOOLTERMPRIME = 37;
-  public int JJTBOOLFACTOR = 38;
-  public int JJTBOOLVAL = 39;
-  public int JJTCOMP = 40;
-  public int JJTCOMPOP = 41;
-  public int JJTFUNCTIONCALL = 42;
-  public int JJTACTUALPARAMETERLIST = 43;
-  public int JJTACTUALPARAMETER = 44;
+  public int JJTANDEXPRESSION = 27;
+  public int JJTEQUALITYEXPRESSION = 28;
+  public int JJTRELATIONALEXPRESSION = 29;
+  public int JJTADDITIVEEXPRESSION = 30;
+  public int JJTMULTIPLICATIVEEXPRESSION = 31;
+  public int JJTUNARYEXPRESSION = 32;
+  public int JJTN = 33;
+  public int JJTLITERALEXPRESSION = 34;
+  public int JJTFUNCTIONCALL = 35;
+  public int JJTACTUALPARAMETERLIST = 36;
+  public int JJTACTUALPARAMETER = 37;
 
 
   public String[] jjtNodeName = {
@@ -77,25 +70,18 @@ public interface MyGrammarTreeConstants
     "typeIdentifier",
     "identifier",
     "variableIdentifier",
-    "expression",
-    "arthExp",
-    "arthExpPrime",
-    "arthTerm",
-    "arthTermPrime",
-    "arthFactor",
-    "numValue",
-    "number",
-    "boolExp",
-    "boolExpPrime",
-    "boolTerm",
-    "boolTermPrime",
-    "boolFactor",
-    "boolVal",
-    "comp",
-    "compOp",
+    "Expression",
+    "AndExpression",
+    "EqualityExpression",
+    "RelationalExpression",
+    "AdditiveExpression",
+    "MultiplicativeExpression",
+    "UnaryExpression",
+    "N",
+    "LiteralExpression",
     "functionCall",
     "actualParameterList",
     "actualParameter",
   };
 }
-/* JavaCC - OriginalChecksum=7eede7bd7197f5f74abc81a20508205c (do not edit this line) */
+/* JavaCC - OriginalChecksum=c0906eb0d9858f177050aa9783245100 (do not edit this line) */

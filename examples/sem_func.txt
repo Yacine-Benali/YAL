@@ -1,11 +1,5 @@
 program numberguess
-function f() : number
-begin
-    x := a + b;
-    result := x;
-end
-
 var x:number;
 begin
-x := (2+5) * 2 / f();
+x := 3+2 * 6;
 end

@@ -4,8 +4,18 @@
 # $PSScriptRoot is the directory the script is running from
 # cd $PSScriptRoot
 
-Remove-Item ./examples/graph.dot
-Remove-Item ./examples/graph.png
+if (Test-Path ./examples/graph.dot) {
+    Remove-Item ./examples/graph.dot
+} else {
+    Write-Host "File ./examples/graph.dot does not exist."
+}
+
+if (Test-Path ./examples/graph.png) {
+    Remove-Item ./examples/graph.png
+} else {
+    Write-Host "File ./examples/graph.png does not exist."
+}
+
 # Run JJTree
 jjtree src\main\mygrammar.jjt
 if ($LASTEXITCODE -ne 0) {

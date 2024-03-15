@@ -98,6 +98,8 @@ class SimpleNode implements Node {
   public int getId() {
     return id;
   }
+
+
 }
 
 /* JavaCC - OriginalChecksum=181a64bb23439c9b2c348e8c32fb537d (do not edit this line) */

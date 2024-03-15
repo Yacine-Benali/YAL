@@ -30,24 +30,17 @@ public interface MyGrammarVisitor
   public Object visit(ASTtypeIdentifier node, Object data);
   public Object visit(ASTidentifier node, Object data);
   public Object visit(ASTvariableIdentifier node, Object data);
-  public Object visit(ASTexpression node, Object data);
-  public Object visit(ASTarthExp node, Object data);
-  public Object visit(ASTarthExpPrime node, Object data);
-  public Object visit(ASTarthTerm node, Object data);
-  public Object visit(ASTarthTermPrime node, Object data);
-  public Object visit(ASTarthFactor node, Object data);
-  public Object visit(ASTnumValue node, Object data);
-  public Object visit(ASTnumber node, Object data);
-  public Object visit(ASTboolExp node, Object data);
-  public Object visit(ASTboolExpPrime node, Object data);
-  public Object visit(ASTboolTerm node, Object data);
-  public Object visit(ASTboolTermPrime node, Object data);
-  public Object visit(ASTboolFactor node, Object data);
-  public Object visit(ASTboolVal node, Object data);
-  public Object visit(ASTcomp node, Object data);
-  public Object visit(ASTcompOp node, Object data);
+  public Object visit(ASTExpression node, Object data);
+  public Object visit(ASTAndExpression node, Object data);
+  public Object visit(ASTEqualityExpression node, Object data);
+  public Object visit(ASTRelationalExpression node, Object data);
+  public Object visit(ASTAdditiveExpression node, Object data);
+  public Object visit(ASTMultiplicativeExpression node, Object data);
+  public Object visit(ASTUnaryExpression node, Object data);
+  public Object visit(ASTN node, Object data);
+  public Object visit(ASTLiteralExpression node, Object data);
   public Object visit(ASTfunctionCall node, Object data);
   public Object visit(ASTactualParameterList node, Object data);
   public Object visit(ASTactualParameter node, Object data);
 }
-/* JavaCC - OriginalChecksum=914d2907340988a0e7a93b5f5c303478 (do not edit this line) */
+/* JavaCC - OriginalChecksum=47ec8ad2ccb7e79953982f910b294457 (do not edit this line) */

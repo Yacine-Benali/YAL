@@ -87,52 +87,31 @@ public class MyGrammarDefaultVisitor implements MyGrammarVisitor{
   public Object visit(ASTvariableIdentifier node, Object data){
     return defaultVisit(node, data);
   }
-  public Object visit(ASTexpression node, Object data){
+  public Object visit(ASTExpression node, Object data){
     return defaultVisit(node, data);
   }
-  public Object visit(ASTarthExp node, Object data){
+  public Object visit(ASTAndExpression node, Object data){
     return defaultVisit(node, data);
   }
-  public Object visit(ASTarthExpPrime node, Object data){
+  public Object visit(ASTEqualityExpression node, Object data){
     return defaultVisit(node, data);
   }
-  public Object visit(ASTarthTerm node, Object data){
+  public Object visit(ASTRelationalExpression node, Object data){
     return defaultVisit(node, data);
   }
-  public Object visit(ASTarthTermPrime node, Object data){
+  public Object visit(ASTAdditiveExpression node, Object data){
     return defaultVisit(node, data);
   }
-  public Object visit(ASTarthFactor node, Object data){
+  public Object visit(ASTMultiplicativeExpression node, Object data){
     return defaultVisit(node, data);
   }
-  public Object visit(ASTnumValue node, Object data){
+  public Object visit(ASTUnaryExpression node, Object data){
     return defaultVisit(node, data);
   }
-  public Object visit(ASTnumber node, Object data){
+  public Object visit(ASTN node, Object data){
     return defaultVisit(node, data);
   }
-  public Object visit(ASTboolExp node, Object data){
-    return defaultVisit(node, data);
-  }
-  public Object visit(ASTboolExpPrime node, Object data){
-    return defaultVisit(node, data);
-  }
-  public Object visit(ASTboolTerm node, Object data){
-    return defaultVisit(node, data);
-  }
-  public Object visit(ASTboolTermPrime node, Object data){
-    return defaultVisit(node, data);
-  }
-  public Object visit(ASTboolFactor node, Object data){
-    return defaultVisit(node, data);
-  }
-  public Object visit(ASTboolVal node, Object data){
-    return defaultVisit(node, data);
-  }
-  public Object visit(ASTcomp node, Object data){
-    return defaultVisit(node, data);
-  }
-  public Object visit(ASTcompOp node, Object data){
+  public Object visit(ASTLiteralExpression node, Object data){
     return defaultVisit(node, data);
   }
   public Object visit(ASTfunctionCall node, Object data){
@@ -145,4 +124,4 @@ public class MyGrammarDefaultVisitor implements MyGrammarVisitor{
     return defaultVisit(node, data);
   }
 }
-/* JavaCC - OriginalChecksum=c37fbd602499bc711f7433eb852e56e7 (do not edit this line) */
+/* JavaCC - OriginalChecksum=3147a86a2770ffeea2a568728eaffcde (do not edit this line) */

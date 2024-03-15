@@ -5,12 +5,9 @@ import main.jjtree.*;
 import java.util.List;
 
 
-public class SemanticAnalysisAdapter implements MyGrammarVisitor {
-    private final SymbolTable symbolTable;
+public class SemanticAnalysisVisitor implements MyGrammarVisitor {
 
-    public SemanticAnalysisAdapter() {
-        symbolTable = new SymbolTable();
-    }
+    public SemanticAnalysisVisitor() {}
 
     @Override
     public Object visit(SimpleNode node, Object data) {
@@ -23,7 +20,7 @@ public class SemanticAnalysisAdapter implements MyGrammarVisitor {
     public Object visit(ASTStart node, Object data) {
         System.out.println("ASTStart");
         node.childrenAccept(this, data);
-        // System.out.println(symbolTable);
+        System.out.println(SymbolTable.symbolTable);
         // careful if not all nodes are being called
         return null;
     }
@@ -42,7 +39,6 @@ public class SemanticAnalysisAdapter implements MyGrammarVisitor {
 
     @Override
     public Object visit(ASTfunctionHeading node, Object data) {
-        System.out.println("ASTfunctionHeading in visitor");
 
         Node formalParamList = node.jjtGetChild(1);
         for (int i = 0; i < formalParamList.jjtGetNumChildren(); i++) {
@@ -56,7 +52,7 @@ public class SemanticAnalysisAdapter implements MyGrammarVisitor {
                 node.parameters.add(new Parameter(paramName, paramType));
             }
         }
-        symbolTable.addFunction(node.functionName, node);
+        SymbolTable.symbolTable.addFunction(node.functionName, node);
         return node.childrenAccept(this, data);
         // return null;
 
@@ -100,7 +96,7 @@ public class SemanticAnalysisAdapter implements MyGrammarVisitor {
                 node.parameters.add(new Parameter(paramName, paramType));
             }
         }
-        symbolTable.addProcedure(node.name, node);
+        SymbolTable.symbolTable.addProcedure(node.name, node);
         return node.childrenAccept(this, data);
     }
 
@@ -117,9 +113,9 @@ public class SemanticAnalysisAdapter implements MyGrammarVisitor {
             node.childrenAccept(this, data);
             return null;
         }
-        symbolTable.enterScope();
+        SymbolTable.symbolTable.enterScope();
         node.childrenAccept(this, data);
-        symbolTable.leaveScope();
+        SymbolTable.symbolTable.leaveScope();
         return null;
 
     }
@@ -131,8 +127,9 @@ public class SemanticAnalysisAdapter implements MyGrammarVisitor {
 
     @Override
     public Object visit(ASTvariableDeclaration node, Object data) {
-        symbolTable.addVariable(node.name, node);
-        return node.childrenAccept(this, data);
+        // symbol table will throw error if variable already declared
+        SymbolTable.symbolTable.addVariable(node.name, node);
+        return null;
     }
 
     @Override
@@ -156,36 +153,14 @@ public class SemanticAnalysisAdapter implements MyGrammarVisitor {
     }
 
     @Override
-    public Object visit(ASTassignmentStatement node, Object data) {
-//        System.out.println("ASTassignmentStatement " + node.expressionType);
-//        // Check if variable is declared
-//        if (!symbolTable.doesVariableExist(node.variableName)) {
-//            throw new RuntimeException("Semantic: Undeclared variable used: " + node.variableName);
-//        }
-//
-//        // 1. Type checking
-//        ASTvariableDeclaration variable = symbolTable.getVariableDeclaration(node.variableName);
-//
-//        // 1.1 Check if the right hand side is a function call
-//
-//        // 1.2 else if its a
-//
-//        if (!variable.type.equals(node.expressionType)) {
-//            throw new RuntimeException("Semantic: Uncompatible types, variable: " + node.variableName
-//                    + " type is: " + variable.type + " but was assigned type: " + node.expressionType);
-//        }
-        return node.childrenAccept(this, data);
-    }
-
-    @Override
     public Object visit(ASTprocedureCall node, Object data) {
 
         // Check if procedure is declared
-        if (!symbolTable.doesProcedureExist(node.name)) {
+        if (!SymbolTable.symbolTable.doesProcedureExist(node.name)) {
             throw new RuntimeException("Semantic: Undeclared procedure used: " + node.name);
         }
         // get the procedure heading
-        ASTprocedureHeading procedureHeading = symbolTable.getProcedureHeading(node.name);
+        ASTprocedureHeading procedureHeading = SymbolTable.symbolTable.getProcedureHeading(node.name);
         // get function heading formal parameter
         List<String> formalParameter = procedureHeading.getFormalParameterTypes();
 
@@ -196,7 +171,7 @@ public class SemanticAnalysisAdapter implements MyGrammarVisitor {
             System.exit(1);
         }
 
-        List<String> actualParamTypes = SemanticHelper.getTypesFromActualParameters((ASTactualParameterList) actualParamList, symbolTable);
+        List<String> actualParamTypes = SemanticHelper.getTypesFromActualParameters((ASTactualParameterList) actualParamList, SymbolTable.symbolTable);
 
         boolean isEqual = actualParamTypes.equals(formalParameter);
         if (!isEqual) {
@@ -243,11 +218,38 @@ public class SemanticAnalysisAdapter implements MyGrammarVisitor {
     }
 
     @Override
-    public Object visit(ASTExpression node, Object data) {
+    public Object visit(ASTassignmentStatement node, Object data) {
+
+        // visit the right hand side, get the expression
+        Object res = node.jjtGetChild(1).jjtAccept(this,data);
+        System.out.println("ASTassignmentStatement: "+res);
+//        System.out.println("ASTassignmentStatement " + node.expressionType);
+//        // Check if variable is declared
+//        if (!SymbolTable.symbolTable.doesVariableExist(node.variableName)) {
+//            throw new RuntimeException("Semantic: Undeclared variable used: " + node.variableName);
+//        }
+//
+//        // 1. Type checking
+//        ASTvariableDeclaration variable = SymbolTable.symbolTable.getVariableDeclaration(node.variableName);
+//
+//        // 1.1 Check if the right hand side is a function call
+//
+//        // 1.2 else if its a
+//
+//        if (!variable.type.equals(node.expressionType)) {
+//            throw new RuntimeException("Semantic: Uncompatible types, variable: " + node.variableName
+//                    + " type is: " + variable.type + " but was assigned type: " + node.expressionType);
+//        }
+//        return node.childrenAccept(this, data);
         return null;
     }
 
     @Override
+    public Object visit(ASTExpression node, Object data) {
+        return null;
+    }
+
+   // @Override
     public Object visit(ASTAndExpression node, Object data) {
         return null;
     }
@@ -292,12 +294,12 @@ public class SemanticAnalysisAdapter implements MyGrammarVisitor {
     public Object visit(ASTfunctionCall node, Object data) {
 
         // Check if function is declared
-        if (!symbolTable.doesFunctionExist(node.functionName)) {
+        if (!SymbolTable.symbolTable.doesFunctionExist(node.functionName)) {
             System.err.println("Semantic: Undeclared function used: " + node.functionName);
             System.exit(1);
         }
         // get the function heading
-        ASTfunctionHeading functionHeading = symbolTable.getFunctionHeading(node.functionName);
+        ASTfunctionHeading functionHeading = SymbolTable.symbolTable.getFunctionHeading(node.functionName);
 
         // get function heading formal parameter
         List<String> formalParameter = ( functionHeading).getFormalParameterTypes();
@@ -309,7 +311,7 @@ public class SemanticAnalysisAdapter implements MyGrammarVisitor {
             System.exit(1);
         }
 
-        List<String> actualParamTypes = SemanticHelper.getTypesFromActualParameters((ASTactualParameterList) actualParamList, symbolTable);
+        List<String> actualParamTypes = SemanticHelper.getTypesFromActualParameters((ASTactualParameterList) actualParamList, SymbolTable.symbolTable);
 
         boolean isEqual = actualParamTypes.equals(formalParameter);
         if (!isEqual) {

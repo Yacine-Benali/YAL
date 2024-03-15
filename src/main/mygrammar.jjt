@@ -67,6 +67,8 @@ public class MyGrammar {
 
 
 
+
+
 PARSER_END(MyGrammar)
 
 SKIP : {
@@ -98,9 +100,9 @@ TOKEN : {
 |   < ELSE : "else" >
 |   < TRUE : "true" >
 |   < FALSE : "false" >
-|   < NOT : "NOT" >
-|   < OR : "OR" >
-|   < AND : "AND" >
+|   < NOT : "!" >
+|   < OR : "||" >
+|   < AND : "&&" >
 // identifier is last else it will also match the above strings
 |   < IDENTIFIER :
         <MINLETTER> (<MINLETTER> | <CAPLETTER>| <DIGIT>)*
@@ -271,12 +273,10 @@ void simpleStatement() :
 
 void assignmentStatement() : {String variableName; String expressionType="string"; }
 {
-   variableName=variableIdentifier() <ASSIGN>
-    (
-    expression()
-    | <STRING>
-    //| variableIdentifier()
-    )
+   variableName=variableIdentifier() <ASSIGN>(LOOKAHEAD(2)
+   functionCall()  // expressions covers variable id & string & number but no function calls
+   | Expression())
+
 
    {jjtThis.variableName = variableName; jjtThis.expressionType = expressionType;}
 }
@@ -298,13 +298,13 @@ void structuredStatement() :
 void whileStatement() :
 {}
 {
-    <WHILE> boolExp() <DO> statementPart()
+    <WHILE> Expression() <DO> statementPart()
 }
 
 void ifStatement() :
 {}
 {
-    <IF> boolExp() <THEN> statementPart() [ <ELSE> statementPart() ]
+    <IF> Expression() <THEN> statementPart() [ <ELSE> statementPart() ]
 }
 // Helper methods for identifiers and types
 void identifierList() :
@@ -335,168 +335,99 @@ String variableIdentifier() :
     t=identifier() {return t.image;}
 }
 
-// Expression
-void expression() : {ExpType type;}
-{
-    /*
-        parser cant tell the diff between arthExp and boolexp
-        becaus they both start with "-" <NUMBER>
-        arthExp = -5 + 2
-        boolexp = -5 > 3
-    */
-    LOOKAHEAD(3)
-    type=arthExp()
-    |
-    boolExp()
-
-}
-// Arithmetic Expressions
-ExpType arthExp() :
-{ExpType type;}
-{
-
-    type=arthTerm() arthExpPrime(type){ return type; }
-}
-
-void arthExpPrime(ExpType inheritedType) :
-{ExpType type;}
-{
-    <PLUS> type=arthTerm() arthExpPrime(type) {/* checkType(inheritedType, type);*/ }
-    |
-    <MINUS> type = arthTerm() arthExpPrime(type) { /*checkType(inheritedType, type);*/ }
-    |
-    {}
-}
-
-ExpType arthTerm() :
-{ExpType type;}
-{
-    type = arthFactor() arthTermPrime(type) { return type; }
-}
-void arthTermPrime(ExpType inheritedType) :
-{ExpType type;}
-{
-    <MULTIPLY> type = arthFactor() arthTermPrime(type) { /*checkType(inheritedType, type);*/ }
-    |
-    <DIVIDE> type = arthFactor() arthTermPrime(type) { /*checkType(inheritedType, type);*/ }
-    |
-    {}
-}
 
 
-ExpType arthFactor() :
-{ExpType type;}
+void Expression() :
+{ Token t;}
 {
-    <MINUS> type=numValue() { return type; }
-    |
-    type = numValue() { return type; }
-}
-ExpType numValue() :
-{ExpType type;}
-{
-    LOOKAHEAD(3) functionCall() { return ExpType.FunctionCall; }
-    |
-    variableIdentifier() { return ExpType.Variable; }
-    |
-    <LPAREN> type = arthExp() <RPAREN> { return type; }
-    |
-    number() { return ExpType.Number; }
+    AndExpression() (t=<OR> AndExpression(){jjtThis.operator = t.image;})*
 
 
 }
 
-String number() : {String type;}
+void AndExpression():
+{Token t;}
 {
-    // <INT> {type = "int";}| <REAL> {type="real";}
-    <NUMBER> {type="number";}
-    {return type;}
-}
-// Boolean Expressions
-ExpType boolExp() :
-{ExpType type;}
-{
-    type=boolTerm() boolExpPrime(type){ return type; }
+  EqualityExpression() ( t=<AND> EqualityExpression(){jjtThis.operator = t.image;})*
 }
 
-void boolExpPrime(ExpType inheritedType) :
-{ExpType type;}
-{
-    <OR> type=boolTerm() boolExpPrime(type)
-    |
-    {}
-}
 
-ExpType boolTerm() :
-{ExpType type;}
-{
-    type = boolFactor() boolTermPrime(type) { return type; }
-}
 
-void boolTermPrime(ExpType inheritedType) :
-{ExpType type;}
+void EqualityExpression() :
+{Token t;}
 {
-    <AND> type=boolFactor() boolTermPrime(type)
-    |
-    {}
-}
-
-ExpType boolFactor() :
-{ExpType type;}
-{
-    <NOT> type=boolVal()
-    |
-    type=boolVal()
-    {return type;}
-}
-
-ExpType boolVal() :
-{ExpType type;}
-{
-    /*
-    comp and (boolexp)
-    common prefix is: "(" "-"
-    */
-    LOOKAHEAD(3) type=comp() {return type;}
-    |
-    <LPAREN> type=boolExp() <RPAREN> {return type;}
-    |
-    /*
-        cant tell between  functioncall & comp()
-        because both start with Identifier (
-        if comp() leads to an
-        arithmetic expression that starts with a function call
-    */
-    LOOKAHEAD(2) functionCall() {return ExpType.FunctionCall;}
-    |
-    variableIdentifier() {return ExpType.Variable;}
-    |
-    <TRUE> {return ExpType.Boolean;}
-    |
-    <FALSE> {return ExpType.Boolean;}
+  RelationalExpression() (( t=<EQUAL> |  t=<NOTEQUAL> ) RelationalExpression() {jjtThis.operator = t.image;})*
 
 }
 
-ExpType comp() :
+void RelationalExpression():
+{Token t;}
+{
+  AdditiveExpression()
+  (
+    (
+       t=<LESS>
+    |  t=<GREATER>
+    |  t=<LESSEQUAL>
+    |  t=<GREATEREQUAL>
+    )
+    AdditiveExpression()
+    {jjtThis.operator = t.image;}
+  )*
+}
+
+
+
+void AdditiveExpression() :
+{Token t;}
+{
+  MultiplicativeExpression() (( t=<PLUS> |  t=<MINUS>) MultiplicativeExpression(){jjtThis.operator = t.image;})*
+
+}
+
+void MultiplicativeExpression() :
+{Token t;}
+{
+  UnaryExpression() (( t=<MULTIPLY> |  t=<DIVIDE> ) UnaryExpression(){jjtThis.operator = t.image;})*
+
+}
+
+
+void UnaryExpression() :
+{Token t = null;}
+{
+  t=<NOT>  UnaryExpression()
+  | t=<MINUS> UnaryExpression()
+  | N()
+  {
+    if (t == null)
+        jjtThis.isUnary = true;
+    else
+        jjtThis.operator = t.image;
+
+  }
+
+}
+
+void N() :
 {}
 {
-    arthExp() compOp() arthExp()
-    {return ExpType.Boolean;}
+  LiteralExpression()
+  |
+  <LPAREN>  Expression() < RPAREN>
+  |
+  variableIdentifier()
+
 }
 
-void compOp() :
-{}
+void LiteralExpression() :
+{Token e;}
 {
-    <LESS>
+    e=<NUMBER>   {jjtThis.setValue(e.image); }
     |
-    <GREATER>
-    |
-    <LESSEQUAL>
-    |
-    <GREATEREQUAL>
-    |
-    <EQUAL>
-    |
-    <NOTEQUAL>
+    e=<STRING> {jjtThis.setValue(e.image); }
+
+
 }
 
 // Function Calls
@@ -536,7 +467,8 @@ void actualParameter() : {String type;Boolean isIdentifier = false;}
     <STRING> {type = "string"; jjtThis.type =type; jjtThis.isIdentifier=false;} |
     <TRUE> {type = "bool"; jjtThis.type =type;jjtThis.isIdentifier=false;} |
     <FALSE> {type = "bool"; jjtThis.type =type;jjtThis.isIdentifier=false;} |
-    type=number() {jjtThis.type =type;jjtThis.isIdentifier=false;}
+    <NUMBER> {type="number" ;jjtThis.type =type;jjtThis.isIdentifier=false;}
+
 
 }
 
