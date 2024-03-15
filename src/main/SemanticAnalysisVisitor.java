@@ -2,15 +2,13 @@ package main;
 
 import main.jjtree.*;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 
-public class SemanticAnalysisVisitor implements MyGrammarVisitor {
+public class SemanticAnalysisAdapter implements MyGrammarVisitor {
     private final SymbolTable symbolTable;
 
-    public SemanticAnalysisVisitor() {
+    public SemanticAnalysisAdapter() {
         symbolTable = new SymbolTable();
     }
 
@@ -245,79 +243,50 @@ public class SemanticAnalysisVisitor implements MyGrammarVisitor {
     }
 
     @Override
-    public Object visit(ASTarthExp node, Object data) {
-        return node.childrenAccept(this, data);
+    public Object visit(ASTExpression node, Object data) {
+        return null;
     }
 
     @Override
-    public Object visit(ASTarthExpPrime node, Object data) {
-        return node.childrenAccept(this, data);
+    public Object visit(ASTAndExpression node, Object data) {
+        return null;
     }
 
     @Override
-    public Object visit(ASTarthTerm node, Object data) {
-        return node.childrenAccept(this, data);
+    public Object visit(ASTEqualityExpression node, Object data) {
+        return null;
     }
 
     @Override
-    public Object visit(ASTarthTermPrime node, Object data) {
-        return node.childrenAccept(this, data);
+    public Object visit(ASTRelationalExpression node, Object data) {
+        return null;
     }
 
     @Override
-    public Object visit(ASTarthFactor node, Object data) {
-        return node.childrenAccept(this, data);
+    public Object visit(ASTAdditiveExpression node, Object data) {
+        return null;
     }
 
     @Override
-    public Object visit(ASTnumValue node, Object data) {
-        return node.childrenAccept(this, data);
+    public Object visit(ASTMultiplicativeExpression node, Object data) {
+        return null;
     }
 
     @Override
-    public Object visit(ASTnumber node, Object data) {
-        return node.childrenAccept(this, data);
+    public Object visit(ASTUnaryExpression node, Object data) {
+        return null;
     }
 
     @Override
-    public Object visit(ASTboolExp node, Object data) {
-        return node.childrenAccept(this, data);
+    public Object visit(ASTN node, Object data) {
+        return null;
     }
 
     @Override
-    public Object visit(ASTboolExpPrime node, Object data) {
-        return node.childrenAccept(this, data);
+    public Object visit(ASTLiteralExpression node, Object data) {
+        return null;
     }
 
-    @Override
-    public Object visit(ASTboolTerm node, Object data) {
-        return node.childrenAccept(this, data);
-    }
-
-    @Override
-    public Object visit(ASTboolTermPrime node, Object data) {
-        return node.childrenAccept(this, data);
-    }
-
-    @Override
-    public Object visit(ASTboolFactor node, Object data) {
-        return node.childrenAccept(this, data);
-    }
-
-    @Override
-    public Object visit(ASTboolVal node, Object data) {
-        return node.childrenAccept(this, data);
-    }
-
-    @Override
-    public Object visit(ASTcomp node, Object data) {
-        return node.childrenAccept(this, data);
-    }
-
-    @Override
-    public Object visit(ASTcompOp node, Object data) {
-        return node.childrenAccept(this, data);
-    }
 
     @Override
     public Object visit(ASTfunctionCall node, Object data) {
@@ -361,8 +330,5 @@ public class SemanticAnalysisVisitor implements MyGrammarVisitor {
         return node.childrenAccept(this, data);
     }
 
-    @Override
-    public Object visit(ASTexpression node, Object data) {
-        return node.childrenAccept(this, data);
-    }
+
 }
