@@ -13,7 +13,7 @@ import main.jjtree.ASTvariableDeclaration;
 
 public class SymbolTable {
     private final Stack<Map<String, Object>> scopeStack;
-    static SymbolTable symbolTable = new SymbolTable();
+    static public SymbolTable symbolTable = new SymbolTable();
 
     public SymbolTable() {
         this.scopeStack = new Stack<>();

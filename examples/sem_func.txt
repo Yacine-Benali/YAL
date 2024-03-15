@@ -1,5 +1,11 @@
 program numberguess
-var x:number;
+
+function f(a:int):int
 begin
-x := 3+2 * 6;
+end
+
+var
+x:int;
+begin
+x:= 5 / 0;
 end

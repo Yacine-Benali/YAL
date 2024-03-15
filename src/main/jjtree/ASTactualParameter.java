@@ -2,25 +2,38 @@
 /* JavaCCOptions:MULTI=true,NODE_USES_PARSER=false,VISITOR=true,TRACK_TOKENS=false,NODE_PREFIX=AST,NODE_EXTENDS=,NODE_FACTORY=,SUPPORT_CLASS_VISIBILITY_PUBLIC=true */
 package main.jjtree;
 
+import main.SemanticHelper;
+
 public
 class ASTactualParameter extends SimpleNode {
 
-  public String type;
-  public boolean isIdentifier;
-  public ASTactualParameter(int id) {
-    super(id);
-  }
+    public int type;
 
-  public ASTactualParameter(MyGrammar p, int id) {
-    super(p, id);
-  }
+    public ASTactualParameter(int id) {
+        super(id);
+    }
+
+    public ASTactualParameter(MyGrammar p, int id) {
+        super(p, id);
+    }
 
 
-  /** Accept the visitor. **/
-  public Object jjtAccept(MyGrammarVisitor visitor, Object data) {
+    /**
+     * Accept the visitor.
+     **/
+    public Object jjtAccept(MyGrammarVisitor visitor, Object data) {
+        // first child is an expression
+        Object result = jjtGetChild(0).jjtAccept(visitor, data);
+        this.type = SemanticHelper.getType(result);
 
-    return
-    visitor.visit(this, data);
-  }
+        return visitor.visit(this, data);
+    }
+
+    @Override
+    public String toString() {
+        return "ASTactualParameter{" +
+                "type=" + SemanticHelper.getStringFromIntType(type) +
+                '}';
+    }
 }
 /* JavaCC - OriginalChecksum=afbad0dd416c4d86c2b38ccc8a8fdb40 (do not edit this line) */

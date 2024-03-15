@@ -14,9 +14,6 @@ import java.io.FileReader;
 import main.*;
 
 
-enum ExpType {
-    Number,Boolean,FunctionCall,Variable
-}
 
 public class MyGrammar {
 
@@ -79,14 +76,15 @@ TOKEN : {
     < #MINLETTER : ["a"-"z"]>
 |   < #CAPLETTER : ["A"-"Z"] >
 |   < #DIGIT : ["0"-"9"] >
-// |   < #INT : (<DIGIT>)+ >
-// |   < #REAL : <INT> "." <INT> >
-|   < NUMBER : (<DIGIT>)+ |  (<DIGIT>)+ "." (<DIGIT>)+ >
-/*|   < INT_KEYWORD : "int" >
-|   < REAL_KEYWORD : "real" >*/
-|   < NUMBER_KEYWORD : "number" >
+|   < INT : (<DIGIT>)+ >
+|   < REAL : <INT> "." <INT> >
+//|   < NUMBER : (<DIGIT>)+ |  (<DIGIT>)+ "." (<DIGIT>)+ >
+|   < INT_KEYWORD : "int" >
+|   < REAL_KEYWORD : "real" >
+//|   < NUMBER_KEYWORD : "number" >
 |   < STRING_KEYWORD : "string" >
 |   < BOOL_KEYWORD : "bool" >
+|   < BOOL : "true" | "false">
 |   < PROGRAM : "program" >
 |   < FUNCTION : "function" >
 |   < PROCEDURE : "procedure" >
@@ -98,8 +96,6 @@ TOKEN : {
 |   < IF : "if" >
 |   < THEN : "then" >
 |   < ELSE : "else" >
-|   < TRUE : "true" >
-|   < FALSE : "false" >
 |   < NOT : "!" >
 |   < OR : "||" >
 |   < AND : "&&" >
@@ -176,7 +172,7 @@ void functionHeading() #functionHeading :
     <FUNCTION> functionName=identifier() [formalParameterList()] <COLON> returnType=typeIdentifier()
     {
         jjtThis.functionName = functionName.image;
-        jjtThis.returnType = returnType.image;
+        jjtThis.setReturnType(returnType.image);
     }
 }
 
@@ -186,19 +182,19 @@ void functionBody() :
     block()
 }
 
-void formalParameterList() #formalParameterList :
+void formalParameterList()  :
 {}
 {
     <LPAREN> [formalParameterSection()] (<COMMA> formalParameterSection())* <RPAREN>
 }
 
-void formalParameterSection() #formalParameterSection:
+void formalParameterSection() :
 {Token paramName, paramType;}
 {
     paramName=identifier() <COLON> paramType=typeIdentifier()
 
     {
-        jjtThis.paramType = paramType.image;
+        jjtThis.setParamType( paramType.image);
         jjtThis.paramName = paramName.image;
     }
 }
@@ -271,14 +267,14 @@ void simpleStatement() :
     LOOKAHEAD(2) assignmentStatement() <SEMICOLON> | procedureCall() <SEMICOLON>
 }
 
-void assignmentStatement() : {String variableName; String expressionType="string"; }
+void assignmentStatement() : {String variableName; }
 {
    variableName=variableIdentifier() <ASSIGN>(LOOKAHEAD(2)
    functionCall()  // expressions covers variable id & string & number but no function calls
    | Expression())
 
 
-   {jjtThis.variableName = variableName; jjtThis.expressionType = expressionType;}
+   {jjtThis.variableName = variableName;}
 }
 
 void procedureCall() :{Token id;}
@@ -316,8 +312,8 @@ void identifierList() :
 Token typeIdentifier() :
 { Token t = null; }
 {
-  // (t = <INT_KEYWORD> { return t; }) |
-   (t = <NUMBER_KEYWORD> { return t; }) |
+    (t = <INT_KEYWORD> { return t; }) |
+   (t = <REAL_KEYWORD> { return t; }) |
    (t = <STRING_KEYWORD> { return t; }) |
    (t = <BOOL_KEYWORD> { return t; } )
 
@@ -396,7 +392,7 @@ void MultiplicativeExpression() :
 void UnaryExpression() :
 {Token t = null;}
 {
-  t=<NOT>  UnaryExpression()
+    t=<NOT>  UnaryExpression()
   | t=<MINUS> UnaryExpression()
   | N()
   {
@@ -410,34 +406,37 @@ void UnaryExpression() :
 }
 
 void N() :
-{}
+{String varName;}
 {
   LiteralExpression()
   |
   <LPAREN>  Expression() < RPAREN>
   |
-  variableIdentifier()
+  varName=variableIdentifier() {jjtThis.isVariable = true;jjtThis.variableName=varName;}
+
 
 }
 
 void LiteralExpression() :
 {Token e;}
 {
-    e=<NUMBER>   {jjtThis.setValue(e.image); }
+    e=<INT>   {jjtThis.setValue(e.image); }
+    |
+    e=<REAL> {jjtThis.setValue(e.image); }
     |
     e=<STRING> {jjtThis.setValue(e.image); }
+    |
+    e=<BOOL> {jjtThis.setValue(e.image); }
 
 
 }
 
 // Function Calls
-ExpType functionCall() #functionCall :
+void functionCall() :
 {Token id;}
 {
     id=identifier() actualParameterList()
-   {jjtThis.functionName = id.image;
-    return ExpType.FunctionCall;
-    }
+   {jjtThis.functionName = id.image;}
 }
 
 void actualParameterList() :
@@ -446,29 +445,9 @@ void actualParameterList() :
     <LPAREN> [actualParameter() (<COMMA> actualParameter())* ] <RPAREN>
 }
 
-void actualParameter() : {String type;Boolean isIdentifier = false;}
+void actualParameter() : {}
 {
-    /*
-        LOOKAHEAD(3)
-        cant tell between  expression & functioncall()
-        because both start with Identifier (
-        expression leads to an
-        arithmetic expression that starts with a function call
-    */
-
-    /*
-            LOOKAHEAD(2)
-            parser cant tell the diff between varid and functid
-            becaus they both start with Identifier
-    */
-    // REMOVED LOOKAHEAD(3) type=expression() {jjtThis.type =type;} |
-    LOOKAHEAD(2) type=variableIdentifier() {jjtThis.isIdentifier= true;jjtThis.type =type;} |
-
-    <STRING> {type = "string"; jjtThis.type =type; jjtThis.isIdentifier=false;} |
-    <TRUE> {type = "bool"; jjtThis.type =type;jjtThis.isIdentifier=false;} |
-    <FALSE> {type = "bool"; jjtThis.type =type;jjtThis.isIdentifier=false;} |
-    <NUMBER> {type="number" ;jjtThis.type =type;jjtThis.isIdentifier=false;}
-
+   Expression()
 
 }
 

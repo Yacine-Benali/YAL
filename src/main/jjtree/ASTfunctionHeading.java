@@ -3,7 +3,9 @@
 package main.jjtree;
 
 import main.Parameter;
+import main.SemanticHelper;
 
+import java.net.Inet4Address;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,11 +13,11 @@ public
 class ASTfunctionHeading extends SimpleNode {
 
     public String functionName;
-    public String returnType;
+    public int returnType;
     public List<Parameter> parameters = new ArrayList<main.Parameter>();
 
-    public List<String> getFormalParameterTypes() {
-        List<String> parametersType = new ArrayList<String>();
+    public List<Integer> getFormalParameterTypes() {
+        List<Integer> parametersType = new ArrayList<Integer>();
 
         for (Parameter item : parameters) {
             parametersType.add(item.type);
@@ -24,6 +26,10 @@ class ASTfunctionHeading extends SimpleNode {
         return parametersType;
     }
 
+    public void setReturnType(String returnType)
+    {
+        this.returnType = SemanticHelper.getIntFromStringType(returnType);
+    }
     public ASTfunctionHeading(int id) {
         super(id);
     }
@@ -46,7 +52,7 @@ class ASTfunctionHeading extends SimpleNode {
     public String toString() {
         return "ASTfunctionHeading{" +
                 "functionName='" + functionName + '\'' +
-                ", returnType='" + returnType + '\'' +
+                ", returnType='" + SemanticHelper.getStringFromIntType(returnType) + '\'' +
                 ", parameters=" + parameters +
                 '}';
     }

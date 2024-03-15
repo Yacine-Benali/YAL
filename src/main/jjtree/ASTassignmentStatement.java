@@ -5,7 +5,7 @@ package main.jjtree;
 public
 class ASTassignmentStatement extends SimpleNode {
   public String variableName;
-  public String expressionType;
+
   public ASTassignmentStatement(int id) {
     super(id);
   }

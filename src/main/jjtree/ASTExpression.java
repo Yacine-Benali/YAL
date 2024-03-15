@@ -2,6 +2,8 @@
 /* JavaCCOptions:MULTI=true,NODE_USES_PARSER=false,VISITOR=true,TRACK_TOKENS=false,NODE_PREFIX=AST,NODE_EXTENDS=,NODE_FACTORY=,SUPPORT_CLASS_VISIBILITY_PUBLIC=true */
 package main.jjtree;
 
+import main.SemanticHelper;
+
 import java.beans.Expression;
 
 public
@@ -27,17 +29,10 @@ class ASTExpression extends SimpleNode {
         return result;
     }
 
-    public int getType(Object ob) {
 
-        if (ob instanceof Integer) return 0;
-        if (ob instanceof Double) return 1;
-        if (ob instanceof String) return 2;
-        if (ob instanceof Boolean) return 3;
-        return -1;
-    }
 
     public boolean getSolve(Object ob) {
-        int type = getType(ob);
+        int type = SemanticHelper.getType(ob);
         boolean bo = true;
         if (type == 0 && ((Integer) ob).equals(0)) bo = false;
         if (type == 1 && (Double) ob == 0) bo = false;
@@ -55,7 +50,7 @@ class ASTExpression extends SimpleNode {
 
             return res;
         }
-        int type1 = getType(res);
+        int type1 = SemanticHelper.getType(res);
         if (operator.equals("!")) {
             res = getSolve(res);
             res = !((Boolean) res);
@@ -71,8 +66,8 @@ class ASTExpression extends SimpleNode {
         Object d1 = this.jjtGetChild(0).jjtAccept(visitor, data);
         Object d2 = this.jjtGetChild(1).jjtAccept(visitor, data);
 
-        int type1 = getType(d1);
-        int type2 = getType(d2);
+        int type1 = SemanticHelper.getType(d1);
+        int type2 = SemanticHelper.getType(d2);
 
 
         switch (operator) {

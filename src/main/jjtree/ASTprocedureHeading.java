@@ -12,8 +12,8 @@ class ASTprocedureHeading extends SimpleNode {
     public String name;
     public List<Parameter> parameters = new ArrayList<Parameter>();
 
-    public List<String> getFormalParameterTypes() {
-        List<String> parametersType = new ArrayList<String>();
+    public List<Integer> getFormalParameterTypes() {
+        List<Integer> parametersType = new ArrayList<Integer>();
 
         for (Parameter item : parameters) {
             parametersType.add(item.type);

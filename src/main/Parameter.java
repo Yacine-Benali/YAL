@@ -2,9 +2,9 @@ package main;
 
 public class Parameter {
     public String name;
-    public String type;
+    public int type;
 
-    Parameter(String name, String type) {
+    Parameter(String name, int type) {
         this.name = name;
         this.type = type;
     }
@@ -13,7 +13,7 @@ public class Parameter {
     public String toString() {
         return "Parameter{" +
                 "name='" + name + '\'' +
-                ", type='" + type + '\'' +
+                ", type='" + SemanticHelper.getStringFromIntType(type) + '\'' +
                 '}';
     }
 }

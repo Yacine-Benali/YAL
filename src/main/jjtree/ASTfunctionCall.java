@@ -2,6 +2,8 @@
 /* JavaCCOptions:MULTI=true,NODE_USES_PARSER=false,VISITOR=true,TRACK_TOKENS=false,NODE_PREFIX=AST,NODE_EXTENDS=,NODE_FACTORY=,SUPPORT_CLASS_VISIBILITY_PUBLIC=true */
 package main.jjtree;
 
+import main.SymbolTable;
+
 public
 class ASTfunctionCall extends SimpleNode {
 
@@ -14,12 +16,21 @@ class ASTfunctionCall extends SimpleNode {
     super(p, id);
   }
 
+  public int getFunctionReturnType()
+  {
+    // Check if function is declared
+    if (!SymbolTable.symbolTable.doesFunctionExist(functionName)) {
+      System.err.println("Semantic: Undeclared function used: " + functionName);
+      System.exit(1);
+    }
+    ASTfunctionHeading functionHeading = SymbolTable.symbolTable.getFunctionHeading(functionName);
+    return functionHeading.returnType;
+  }
 
   /** Accept the visitor. **/
   public Object jjtAccept(MyGrammarVisitor visitor, Object data) {
 
-    return
-    visitor.visit(this, data);
+    return     visitor.visit(this, data);
   }
 }
 /* JavaCC - OriginalChecksum=eca91342669d3f0d5cc0e2d7d4d7b32b (do not edit this line) */

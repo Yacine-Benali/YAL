@@ -10,6 +10,8 @@ class ASTvariableDeclaration extends SimpleNode {
 
   public String name;
   public String type;
+  public Object value;
+  public boolean isInit = false;
 
   public ASTvariableDeclaration(MyGrammar p, int id) {
     super(p, id);
@@ -28,6 +30,7 @@ class ASTvariableDeclaration extends SimpleNode {
     return "ASTvariableDeclaration{" +
             "name='" + name + '\'' +
             ", type='" + type + '\'' +
+            ", value=" + value +
             '}';
   }
 }

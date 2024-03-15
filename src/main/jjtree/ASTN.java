@@ -2,11 +2,15 @@
 /* JavaCCOptions:MULTI=true,NODE_USES_PARSER=false,VISITOR=true,TRACK_TOKENS=false,NODE_PREFIX=AST,NODE_EXTENDS=,NODE_FACTORY=,SUPPORT_CLASS_VISIBILITY_PUBLIC=true */
 package main.jjtree;
 
+import main.SymbolTable;
+
 public
 class ASTN extends ASTExpression {
   public ASTN(int id) {
     super(id);
   }
+  public boolean isVariable = false;
+  public String variableName;
 
   public ASTN(MyGrammar p, int id) {
     super(p, id);
@@ -15,6 +19,14 @@ class ASTN extends ASTExpression {
 
   /** Accept the visitor. **/
   public Object jjtAccept(MyGrammarVisitor visitor, Object data) {
+    if(isVariable)
+    {
+      if (!SymbolTable.symbolTable.doesVariableExist(variableName)) {
+        throw new RuntimeException("Semantic: Undeclared variable used: " + variableName);
+      }
+      ASTvariableDeclaration variable = SymbolTable.symbolTable.getVariableDeclaration(variableName);
+      return variable.value;
+    }
     return execute(visitor, data);
   }
 }
