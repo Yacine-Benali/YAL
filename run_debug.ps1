@@ -51,4 +51,4 @@ if ($LASTEXITCODE -ne 0) {
 }
 
 # if AST exists visualize it
-dot -Tpng ./examples/graph.dot -o ./examples/graph.png
+#dot -Tpng ./examples/graph.dot -o ./examples/graph.png

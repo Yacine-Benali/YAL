@@ -1,3 +1,8 @@
+// hello world
+/**
+* sabaho khayr
+*/
+
 program numberguess
 
 function doubleIt(y:int):int

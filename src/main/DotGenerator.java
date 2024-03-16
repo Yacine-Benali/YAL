@@ -30,12 +30,12 @@ public class DotGenerator {
         }
 
         for (int i = 0; i < node.jjtGetNumChildren(); i++) {
-            visit((SimpleNode)node.jjtGetChild(i), node);
+            visit((SimpleNode) node.jjtGetChild(i), node);
         }
     }
 
     public void getDotGraph() {
-        String content =  dotGraph.toString();
+        String content = dotGraph.toString();
 
         try (FileWriter fileWriter = new FileWriter("graph.dot")) {
             fileWriter.write(content);

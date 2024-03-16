@@ -11,95 +11,103 @@ public interface MyGrammarConstants {
   /** End of File. */
   int EOF = 0;
   /** RegularExpression Id. */
-  int MINLETTER = 7;
+  int SINGLECOM = 7;
   /** RegularExpression Id. */
-  int CAPLETTER = 8;
+  int MULTCOM = 8;
   /** RegularExpression Id. */
-  int DIGIT = 9;
+  int SINGLE_LINE_COMMENT = 9;
   /** RegularExpression Id. */
-  int INT = 10;
+  int MULTI_LINE_COMMENT = 10;
   /** RegularExpression Id. */
-  int REAL = 11;
+  int MINLETTER = 11;
   /** RegularExpression Id. */
-  int BOOL = 12;
+  int CAPLETTER = 12;
   /** RegularExpression Id. */
-  int INT_KEYWORD = 13;
+  int DIGIT = 13;
   /** RegularExpression Id. */
-  int REAL_KEYWORD = 14;
+  int INT = 14;
   /** RegularExpression Id. */
-  int STRING_KEYWORD = 15;
+  int REAL = 15;
   /** RegularExpression Id. */
-  int BOOL_KEYWORD = 16;
+  int BOOL = 16;
   /** RegularExpression Id. */
-  int PROGRAM = 17;
+  int INT_KEYWORD = 17;
   /** RegularExpression Id. */
-  int FUNCTION = 18;
+  int REAL_KEYWORD = 18;
   /** RegularExpression Id. */
-  int PROCEDURE = 19;
+  int STRING_KEYWORD = 19;
   /** RegularExpression Id. */
-  int VAR = 20;
+  int BOOL_KEYWORD = 20;
   /** RegularExpression Id. */
-  int BEGIN = 21;
+  int PROGRAM = 21;
   /** RegularExpression Id. */
-  int END = 22;
+  int FUNCTION = 22;
   /** RegularExpression Id. */
-  int WHILE = 23;
+  int PROCEDURE = 23;
   /** RegularExpression Id. */
-  int BREAK = 24;
+  int VAR = 24;
   /** RegularExpression Id. */
-  int DO = 25;
+  int BEGIN = 25;
   /** RegularExpression Id. */
-  int IF = 26;
+  int END = 26;
   /** RegularExpression Id. */
-  int THEN = 27;
+  int WHILE = 27;
   /** RegularExpression Id. */
-  int ELSE = 28;
+  int BREAK = 28;
   /** RegularExpression Id. */
-  int RESULT = 29;
+  int DO = 29;
   /** RegularExpression Id. */
-  int PRINT = 30;
+  int IF = 30;
   /** RegularExpression Id. */
-  int NOT = 31;
+  int THEN = 31;
   /** RegularExpression Id. */
-  int OR = 32;
+  int ELSE = 32;
   /** RegularExpression Id. */
-  int AND = 33;
+  int RESULT = 33;
   /** RegularExpression Id. */
-  int PLUS = 34;
+  int PRINT = 34;
   /** RegularExpression Id. */
-  int MINUS = 35;
+  int NOT = 35;
   /** RegularExpression Id. */
-  int MULTIPLY = 36;
+  int OR = 36;
   /** RegularExpression Id. */
-  int DIVIDE = 37;
+  int AND = 37;
   /** RegularExpression Id. */
-  int LESS = 38;
+  int PLUS = 38;
   /** RegularExpression Id. */
-  int GREATER = 39;
+  int MINUS = 39;
   /** RegularExpression Id. */
-  int LESSEQUAL = 40;
+  int MULTIPLY = 40;
   /** RegularExpression Id. */
-  int GREATEREQUAL = 41;
+  int DIVIDE = 41;
   /** RegularExpression Id. */
-  int EQUAL = 42;
+  int LESS = 42;
   /** RegularExpression Id. */
-  int NOTEQUAL = 43;
+  int GREATER = 43;
   /** RegularExpression Id. */
-  int ASSIGN = 44;
+  int LESSEQUAL = 44;
   /** RegularExpression Id. */
-  int LPAREN = 45;
+  int GREATEREQUAL = 45;
   /** RegularExpression Id. */
-  int RPAREN = 46;
+  int EQUAL = 46;
   /** RegularExpression Id. */
-  int COMMA = 47;
+  int NOTEQUAL = 47;
   /** RegularExpression Id. */
-  int COLON = 48;
+  int ASSIGN = 48;
   /** RegularExpression Id. */
-  int SEMICOLON = 49;
+  int LPAREN = 49;
   /** RegularExpression Id. */
-  int IDENTIFIER = 50;
+  int RPAREN = 50;
   /** RegularExpression Id. */
-  int STRING = 51;
+  int COMMA = 51;
+  /** RegularExpression Id. */
+  int COLON = 52;
+  /** RegularExpression Id. */
+  int SEMICOLON = 53;
+  /** RegularExpression Id. */
+  int IDENTIFIER = 54;
+  /** RegularExpression Id. */
+  int STRING = 55;
 
   /** Lexical state. */
   int DEFAULT = 0;
@@ -113,6 +121,10 @@ public interface MyGrammarConstants {
     "\"\\r\"",
     "\"\\\' \\\'\"",
     "\"\\\'\\\'\"",
+    "<SINGLECOM>",
+    "<MULTCOM>",
+    "<SINGLE_LINE_COMMENT>",
+    "<MULTI_LINE_COMMENT>",
     "<MINLETTER>",
     "<CAPLETTER>",
     "<DIGIT>",
