@@ -37,7 +37,7 @@ public class DotGenerator {
     public void getDotGraph() {
         String content =  dotGraph.toString();
 
-        try (FileWriter fileWriter = new FileWriter("./examples/graph.dot")) {
+        try (FileWriter fileWriter = new FileWriter("graph.dot")) {
             fileWriter.write(content);
 
         } catch (IOException e) {

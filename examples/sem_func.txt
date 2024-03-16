@@ -1,17 +1,13 @@
 program numberguess
 
-function f(y:int):int
+function doubleIt(y:int):int
 begin
-    while y > 0 do
-        begin
-            print(y);
-            y := y -1;
-        end
-    Result := 42;
+    Result := y*2;
 end
 
 var
     x:int;
 begin
-    x:=f(10);
+    x:=doubleIt(10);
+    print(x);
 end

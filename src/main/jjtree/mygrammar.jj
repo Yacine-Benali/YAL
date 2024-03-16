@@ -40,18 +40,9 @@ public class MyGrammar/*@bgen(jjtree)*/implements MyGrammarTreeConstants/*@egen*
              generator.generateDot(rootNode);
              generator.getDotGraph();
 
-
-
-
-
             SemanticAnalysisVisitor visitor = new SemanticAnalysisVisitor();
             rootNode.jjtAccept(visitor, null); // Starts the visiting process*/
 
-
-
-
-
-            System.out.println("File parsed successfully.");
         } catch (TokenMgrError e) {
             System.out.println("Lexical Error: \n" + e.getMessage());
         } catch (ParseException e) {

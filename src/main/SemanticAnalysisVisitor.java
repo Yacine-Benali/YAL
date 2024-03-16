@@ -17,15 +17,12 @@ public class SemanticAnalysisVisitor implements MyGrammarVisitor {
     @Override
     public Object visit(SimpleNode node, Object data) {
         // General visit method for all nodes
-        System.out.println("visit SimpleNode");
         return node.childrenAccept(this, data);
     }
 
     @Override
     public Object visit(ASTStart node, Object data) {
-        System.out.println("ASTStart");
         node.childrenAccept(this, data);
-        System.out.println(SymbolTable.symbolTable);
         // careful if not all nodes are being called
         return null;
     }

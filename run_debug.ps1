@@ -2,7 +2,7 @@
 
 # Change directory to the script's directory (optional, depends on your setup)
 # $PSScriptRoot is the directory the script is running from
-# cd $PSScriptRoot
+cd $PSScriptRoot
 
 if (Test-Path ./examples/graph.dot) {
     Remove-Item ./examples/graph.dot
