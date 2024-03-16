@@ -3,6 +3,7 @@
 package main.jjtree;
 
 import main.SymbolTable;
+import main.models.Variable;
 
 public
 class ASTN extends ASTExpression {
@@ -21,10 +22,7 @@ class ASTN extends ASTExpression {
   public Object jjtAccept(MyGrammarVisitor visitor, Object data) {
     if(isVariable)
     {
-      if (!SymbolTable.symbolTable.doesVariableExist(variableName)) {
-        throw new RuntimeException("Semantic: Undeclared variable used: " + variableName);
-      }
-      ASTvariableDeclaration variable = SymbolTable.symbolTable.getVariableDeclaration(variableName);
+      Variable variable = SymbolTable.symbolTable.getVariableDeclaration(variableName);
       return variable.value;
     }
     return execute(visitor, data);

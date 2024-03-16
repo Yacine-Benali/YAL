@@ -6,6 +6,8 @@ import java.util.Stack;
 import main.jjtree.ASTfunctionHeading;
 import main.jjtree.ASTprocedureHeading;
 import main.jjtree.ASTvariableDeclaration;
+import main.models.Procedure;
+import main.models.Variable;
 
 /**
  * Class representing a symbol table with scope management.
@@ -45,35 +47,26 @@ public class SymbolTable {
         throw new RuntimeException("SymbolTable: function '" + name + "' could not be retrieved");
     }
 
-    public void addProcedure(String name, ASTprocedureHeading procedureNode)  {
+    public void addProcedure(String name, Procedure procedure)  {
         Map<String, Object> currentScope = scopeStack.peek();
         if (currentScope.containsKey(name)) {
             // TODO show error line and column
             throw new RuntimeException("SymbolTable: Procedure '" + name + "' already defined in the current scope");
         }
-        currentScope.put(name, procedureNode);
+        currentScope.put(name, procedure);
     }
 
-
-    public boolean doesProcedureExist(String name)  {
+    public Procedure getProcedure(String name)  {
         Map<String, Object> currentScope = scopeStack.peek();
-        if (currentScope.containsKey(name)  ) {
-            return currentScope.get(name) instanceof ASTprocedureHeading;
+        if (currentScope.containsKey(name)) {
+            if(currentScope.get(name) instanceof Procedure)
+                return (Procedure) currentScope.get(name);
         }
-        return false;
-    }
-
-    public ASTprocedureHeading getProcedureHeading(String name)  {
-        Map<String, Object> currentScope = scopeStack.peek();
-        if (currentScope.containsKey(name)  ) {
-            if(currentScope.get(name) instanceof ASTprocedureHeading)
-                return (ASTprocedureHeading)currentScope.get(name);
-        }
-        throw new RuntimeException("Procedure '" + name + "' could not be retrieved");
+        throw new RuntimeException("SymbolTable, Undeclared procedure called: " + name);
 
     }
 
-    public void addVariable(String name, ASTvariableDeclaration variableNode)  {
+    public void addVariable(String name, Variable variableNode)  {
         Map<String, Object> currentScope = scopeStack.peek();
         if (currentScope.containsKey(name)) {
             throw new RuntimeException("SymbolTable: Variable '" + name + "' already defined in the current scope");
@@ -81,20 +74,13 @@ public class SymbolTable {
         currentScope.put(name, variableNode);
     }
 
-    public boolean doesVariableExist(String name)  {
+    public Variable getVariableDeclaration(String name)  {
         Map<String, Object> currentScope = scopeStack.peek();
         if (currentScope.containsKey(name)  ) {
-            return currentScope.get(name) instanceof ASTvariableDeclaration;
+            if(currentScope.get(name) instanceof Variable)
+                return (Variable)currentScope.get(name);
         }
-        return false;
-    }
-    public ASTvariableDeclaration getVariableDeclaration(String name)  {
-        Map<String, Object> currentScope = scopeStack.peek();
-        if (currentScope.containsKey(name)  ) {
-            if(currentScope.get(name) instanceof ASTvariableDeclaration)
-                return (ASTvariableDeclaration)currentScope.get(name);
-        }
-        throw new RuntimeException("SymbolTable: Variable '" + name + "' could not be retrieved");
+        throw new RuntimeException("SymbolTable: Variable '" + name + "' is undeclared in the scope");
     }
 
 

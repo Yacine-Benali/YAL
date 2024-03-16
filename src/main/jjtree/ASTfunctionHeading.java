@@ -2,10 +2,9 @@
 /* JavaCCOptions:MULTI=true,NODE_USES_PARSER=false,VISITOR=true,TRACK_TOKENS=false,NODE_PREFIX=AST,NODE_EXTENDS=,NODE_FACTORY=,SUPPORT_CLASS_VISIBILITY_PUBLIC=true */
 package main.jjtree;
 
-import main.Parameter;
+import main.models.Parameter;
 import main.SemanticHelper;
 
-import java.net.Inet4Address;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,7 +13,7 @@ class ASTfunctionHeading extends SimpleNode {
 
     public String functionName;
     public int returnType;
-    public List<Parameter> parameters = new ArrayList<main.Parameter>();
+    public List<Parameter> parameters = new ArrayList<Parameter>();
 
     public List<Integer> getFormalParameterTypes() {
         List<Integer> parametersType = new ArrayList<Integer>();

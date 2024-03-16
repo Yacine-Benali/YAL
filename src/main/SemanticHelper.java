@@ -1,6 +1,7 @@
 package main;
 
 import main.jjtree.*;
+import main.models.Parameter;
 
 import java.util.ArrayList;
 import java.util.List;
