@@ -4,7 +4,7 @@ options {
     MULTI = true;
     JJTREE_OUTPUT_DIRECTORY = "./src/main/jjtree";
     NODE_PACKAGE="main.jjtree";
-
+    TRACK_TOKENS = true;
     //DEBUG_PARSER = true;
 }
 
