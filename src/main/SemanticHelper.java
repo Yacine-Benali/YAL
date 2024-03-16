@@ -58,6 +58,19 @@ public class SemanticHelper {
         return actualParamTypes;
     }
 
+    static public List<Object> getValuesFromActualParameters(ASTactualParameterList actualParamList) {
+        List<Object> actualParamValues = new ArrayList<>();
+        for (int i = 0; i < actualParamList.jjtGetNumChildren(); i++) {
+            Node paramNode = actualParamList.jjtGetChild(i);
+            if (paramNode instanceof ASTactualParameter) {
+                actualParamValues.add(((ASTactualParameter) paramNode).value);
+            }
+        }
+        return actualParamValues;
+    }
+
+
+
     static public List<Parameter> getParamsFromFormalParametersList(ASTformalParameterList formalParamList) {
         List<Parameter> parameters = new ArrayList<Parameter>();
         for (int i = 0; i < formalParamList.jjtGetNumChildren(); i++) {

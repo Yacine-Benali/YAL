@@ -90,7 +90,7 @@ public class SemanticAnalysisVisitor implements MyGrammarVisitor {
 
     @Override
     public Object visit(ASTprocedureHeading node, Object data) {
-        // has two children (identfier) (formalParameterList)
+        // has two children (identifier) (formalParameterList)
         Node formalParamList = node.jjtGetChild(1);
 
         if (formalParamList instanceof ASTformalParameterList) {
@@ -107,7 +107,7 @@ public class SemanticAnalysisVisitor implements MyGrammarVisitor {
     @Override
     public Object visit(ASTprocedureBody node, Object data) {
         // This wille execute the procedure body
-        return node.childrenAccept(this,data);
+        return node.childrenAccept(this, data);
     }
 
     @Override
@@ -129,21 +129,22 @@ public class SemanticAnalysisVisitor implements MyGrammarVisitor {
             System.err.println("Error in calling procedure expected parameters " + formalParameter + " got " + actualParamTypes);
             System.exit(1);
         }
-        // execution the procedure
+        // execution of the procedure
 
         // push new scope
-        // SymbolTable.symbolTable.enterScope();
+        SymbolTable.symbolTable.enterScope();
+        List<Object> actualParamValuesList = SemanticHelper.getValuesFromActualParameters(actualParamList);
         // add the actual parameters
-//        for(Parameter parameter : procedure.heading.parameters)
-//        {
-//            //
-//        }
-
-
+        for (Parameter fParameter : procedure.heading.parameters) {
+            for (Object actualParamValues : actualParamValuesList) {
+                Variable variable = new Variable(fParameter.name, fParameter.type, actualParamValues, true);
+                SymbolTable.symbolTable.addVariable(variable.name, variable);
+            }
+        }
         // execute the code
         procedure.body.jjtAccept(this, data);
         // leave the scope
-        // SymbolTable.symbolTable.leaveScope();
+        SymbolTable.symbolTable.leaveScope();
 
 
         return null;
@@ -151,18 +152,7 @@ public class SemanticAnalysisVisitor implements MyGrammarVisitor {
 
     @Override
     public Object visit(ASTblock node, Object data) {
-
-        if (node.jjtGetParent() instanceof ASTStart) {
-            // dont push into the stack if its the first block
-            // a stack is created by default
-            node.childrenAccept(this, data);
-            return null;
-        }
-        SymbolTable.symbolTable.enterScope();
-        node.childrenAccept(this, data);
-        SymbolTable.symbolTable.leaveScope();
-        return null;
-
+        return node.childrenAccept(this, data);
     }
 
     @Override
@@ -174,7 +164,7 @@ public class SemanticAnalysisVisitor implements MyGrammarVisitor {
     public Object visit(ASTvariableDeclaration node, Object data) {
         // symbol table will throw error if variable already declared
         int varType = SemanticHelper.getIntFromStringType(node.type);
-        Variable variable = new Variable(node.name,varType,null,false);
+        Variable variable = new Variable(node.name, varType, null, false);
         SymbolTable.symbolTable.addVariable(node.name, variable);
         return null;
     }
@@ -256,22 +246,22 @@ public class SemanticAnalysisVisitor implements MyGrammarVisitor {
         if (node.jjtGetChild(1) instanceof ASTExpression expressionNode) {
             // its an expression
             // 2. Get the expression value
-            Object expres = expressionNode.jjtAccept(this, data);
+            Object express = expressionNode.jjtAccept(this, data);
             // 2.1 Get expression type
-            int expType = SemanticHelper.getType(expres);
+            int expType = SemanticHelper.getType(express);
 
             if (varType != expType) {
-                throw new RuntimeException("Semantic: Uncompatible types, variable: " + node.variableName + " type is: " + variable.type + " but was assigned type: " + SemanticHelper.getStringFromIntType(expType));
+                throw new RuntimeException("Semantic: Incompatible types, variable: " + node.variableName + " type is: " + variable.type + " but was assigned type: " + SemanticHelper.getStringFromIntType(expType));
             }
             // 3 Do the assignment
-            variable.value = expres;
+            variable.value = express;
             variable.isInit = true;
-        } else if (node.jjtGetChild(1) instanceof ASTfunctionCall functioncallNode) {
-            // its a function call
+        } else if (node.jjtGetChild(1) instanceof ASTfunctionCall functionCallNode) {
+            // it's a function call
             // check the type
-            int functionReturnType = functioncallNode.getFunctionReturnType();
+            int functionReturnType = functionCallNode.getFunctionReturnType();
             if (varType != functionReturnType) {
-                throw new RuntimeException("Semantic: Uncompatible types, variable: " + node.variableName + " type is: " + variable.type + " but was assigned function return type: " + SemanticHelper.getStringFromIntType(functionReturnType));
+                throw new RuntimeException("Semantic: Incompatible types, variable: " + node.variableName + " type is: " + variable.type + " but was assigned function return type: " + SemanticHelper.getStringFromIntType(functionReturnType));
             }
             return node.childrenAccept(this, data);
 

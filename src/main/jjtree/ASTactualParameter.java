@@ -8,6 +8,7 @@ public
 class ASTactualParameter extends SimpleNode {
 
     public int type;
+    public Object value;
 
     public ASTactualParameter(int id) {
         super(id);
@@ -24,6 +25,7 @@ class ASTactualParameter extends SimpleNode {
     public Object jjtAccept(MyGrammarVisitor visitor, Object data) {
         // first child is an expression
         Object result = jjtGetChild(0).jjtAccept(visitor, data);
+        this.value= result;
         this.type = SemanticHelper.getType(result);
 
         return visitor.visit(this, data);

@@ -1,8 +1,6 @@
 program numberguess
 
-procedure p()
-var
-x:int;
+procedure p(x:int)
 begin
     x := 10;
     while x > 0 do
@@ -19,5 +17,5 @@ end
 var
     x:int;
 begin
-    p();
+    p(10);
 end
