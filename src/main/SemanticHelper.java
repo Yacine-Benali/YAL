@@ -1,5 +1,6 @@
 package main;
 
+import main.Exceptions.RuntimeError;
 import main.jjtree.*;
 import main.models.Parameter;
 
@@ -15,7 +16,7 @@ public class SemanticHelper {
         if (str.equals("real")) return 1;
         if (str.equals("string")) return 2;
         if (str.equals("bool")) return 3;
-        throw new RuntimeException("getIntFromStringType could not solve " + str);
+        throw new RuntimeError("getIntFromStringType could not solve " + str);
 
     }
 
@@ -24,7 +25,8 @@ public class SemanticHelper {
         if (numberType == 1) return "real";
         if (numberType == 2) return "string";
         if (numberType == 3) return "bool";
-        throw new RuntimeException("getStringFromIntType could not solve " + numberType);
+        if (numberType == -1) return "null";
+        throw new RuntimeError("getStringFromIntType could not solve " + numberType);
 
     }
 

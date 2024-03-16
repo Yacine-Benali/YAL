@@ -1,0 +1,12 @@
+program test
+    function hello(name:string):string
+    begin
+        Result := "hello Mr." + name;
+    end
+
+var res:string;
+begin
+    res := "yacine";
+    res:= hello(res,true,3*2);
+    print(res);
+end

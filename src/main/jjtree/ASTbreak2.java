@@ -15,7 +15,6 @@ class ASTbreak2 extends SimpleNode {
 
   /** Accept the visitor. **/
   public Object jjtAccept(MyGrammarVisitor visitor, Object data) {
-
     return "break";
   }
 }

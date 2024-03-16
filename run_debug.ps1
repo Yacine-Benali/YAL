@@ -1,5 +1,8 @@
 # PowerShell Script to process grammar with JJTree and JavaCC, compile Java files, and run a Java program
 
+param (
+    [string]$FilePath
+)
 # Change directory to the script's directory (optional, depends on your setup)
 # $PSScriptRoot is the directory the script is running from
 cd $PSScriptRoot
@@ -44,7 +47,7 @@ if ($LASTEXITCODE -ne 0) {
 }
 
 # Run the Java program
-java -cp ./bin main.jjtree.MyGrammar ./examples/sem_func.txt
+java -cp ./bin main.jjtree.MyGrammar $FilePath
 if ($LASTEXITCODE -ne 0) {
     Write-Error "Java execution failed with exit code $LASTEXITCODE"
     exit $LASTEXITCODE

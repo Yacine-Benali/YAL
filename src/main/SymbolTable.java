@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Stack;
 
+import main.Exceptions.RuntimeError;
 import main.models.Function;
 import main.models.Procedure;
 import main.models.Variable;
@@ -25,7 +26,7 @@ public class SymbolTable {
         Map<String, Object> currentScope = scopeStack.peek();
         if (currentScope.containsKey(name)) {
             // TODO show error line and column
-            throw new RuntimeException("SymbolTable: Function '" + name + "' already defined in the current scope");
+            throw new RuntimeError("SymbolTable: Function '" + name + "' already defined in the current scope");
 
         }
         currentScope.put(name, function);
@@ -38,14 +39,14 @@ public class SymbolTable {
             if (currentScope.get(name) instanceof Function)
                 return (Function) currentScope.get(name);
         }
-        throw new RuntimeException("SymbolTable, Undeclared function called: " + name );
+        throw new RuntimeError("SymbolTable, Undeclared function called: " + name );
     }
 
     public void addProcedure(String name, Procedure procedure) {
         Map<String, Object> currentScope = scopeStack.peek();
         if (currentScope.containsKey(name)) {
             // TODO show error line and column
-            throw new RuntimeException("SymbolTable: Procedure '" + name + "' already defined in the current scope");
+            throw new RuntimeError("SymbolTable: Procedure '" + name + "' already defined in the current scope");
         }
         currentScope.put(name, procedure);
     }
@@ -56,14 +57,14 @@ public class SymbolTable {
             if (currentScope.get(name) instanceof Procedure)
                 return (Procedure) currentScope.get(name);
         }
-        throw new RuntimeException("SymbolTable, Undeclared procedure called: " + name);
+        throw new RuntimeError("SymbolTable, Undeclared procedure called: " + name);
 
     }
 
     public void addVariable(String name, Variable variableNode) {
         Map<String, Object> currentScope = scopeStack.peek();
         if (currentScope.containsKey(name)) {
-            throw new RuntimeException("SymbolTable: Variable '" + name + "' already defined in the current scope");
+            throw new RuntimeError("SymbolTable: Variable '" + name + "' already defined in the current scope");
         }
         currentScope.put(name, variableNode);
     }
@@ -74,7 +75,7 @@ public class SymbolTable {
             if (currentScope.get(name) instanceof Variable)
                 return (Variable) currentScope.get(name);
         }
-        throw new RuntimeException("SymbolTable: Variable '" + name + "' is undeclared in the scope");
+        throw new RuntimeError("SymbolTable: Variable '" + name + "' is undeclared in the scope");
     }
 
 

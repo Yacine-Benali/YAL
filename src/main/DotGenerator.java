@@ -41,9 +41,8 @@ public class DotGenerator {
             fileWriter.write(content);
 
         } catch (IOException e) {
-            System.out.println("wtf " + content);
 
-            System.err.println("Error writing to file: " + e.getMessage());
+            System.err.println("getDotGraph Error writing to file: " + e.getMessage());
         }
     }
 }

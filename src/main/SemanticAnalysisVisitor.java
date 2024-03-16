@@ -1,11 +1,15 @@
 package main;
 
+import main.Exceptions.RuntimeError;
+import main.Exceptions.SemanitcException;
+import main.Exceptions.TypeMismatch;
 import main.jjtree.*;
 import main.models.Function;
 import main.models.Parameter;
 import main.models.Procedure;
 import main.models.Variable;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -67,7 +71,7 @@ public class SemanticAnalysisVisitor implements MyGrammarVisitor {
             node.parameters.addAll(list);
 
         } else {
-            throw new RuntimeException("Semantic: function formalParameterList not found ");
+            throw new RuntimeError("Semantic: function formalParameterList not found ");
         }
         return null;
     }
@@ -94,8 +98,19 @@ public class SemanticAnalysisVisitor implements MyGrammarVisitor {
 
         boolean isEqual = actualParamTypes.equals(formalParameter);
         if (!isEqual) {
-            System.err.println("Error in calling procedure expected parameters " + formalParameter + " got " + actualParamTypes);
-            System.exit(1);
+            List<String> actualParamTypesString = new ArrayList<String>();
+            for (int a : actualParamTypes) {
+                actualParamTypesString.add(SemanticHelper.getStringFromIntType(a));
+            }
+            List<String> formalParamTypesString = new ArrayList<String>();
+            for (int a : formalParameter) {
+                formalParamTypesString.add(SemanticHelper.getStringFromIntType(a));
+            }
+            throw new TypeMismatch(node.jjtGetFirstToken(),
+                    String.format("Error in calling function expected parameters " +
+                            "%s got %s", formalParamTypesString, actualParamTypesString));
+
+
         }
         // execute the function
         SymbolTable.symbolTable.enterScope();
@@ -142,7 +157,7 @@ public class SemanticAnalysisVisitor implements MyGrammarVisitor {
             node.parameters.addAll(list);
 
         } else {
-            throw new RuntimeException("Semantic: Procedure formalParameterList not found ");
+            throw new RuntimeError("ASTprocedureHeading: Procedure formalParameterList not found ");
         }
         return null;
 
@@ -167,11 +182,21 @@ public class SemanticAnalysisVisitor implements MyGrammarVisitor {
         // before getting the types
         actualParamList.childrenAccept(this, data);
         List<Integer> actualParamTypes = SemanticHelper.getTypesFromActualParameters(actualParamList);
-
         boolean isEqual = actualParamTypes.equals(formalParameter);
         if (!isEqual) {
-            System.err.println("Error in calling procedure expected parameters " + formalParameter + " got " + actualParamTypes);
-            System.exit(1);
+            List<String> actualParamTypesString = new ArrayList<String>();
+            for (int a : actualParamTypes) {
+                actualParamTypesString.add(SemanticHelper.getStringFromIntType(a));
+            }
+            List<String> formalParamTypesString = new ArrayList<String>();
+            for (int a : formalParameter) {
+                formalParamTypesString.add(SemanticHelper.getStringFromIntType(a));
+            }
+            throw new TypeMismatch(node.jjtGetFirstToken(),
+                    String.format("Error in calling procedure expected parameters " +
+                            "%s got %s", formalParamTypesString, actualParamTypesString));
+
+
         }
         // execute the function
         SymbolTable.symbolTable.enterScope();
@@ -293,7 +318,9 @@ public class SemanticAnalysisVisitor implements MyGrammarVisitor {
             int expType = SemanticHelper.getType(express);
 
             if (varType != expType) {
-                throw new RuntimeException("Semantic: Incompatible types, variable: " + node.variableName + " type is: " + variable.type + " but was assigned type: " + SemanticHelper.getStringFromIntType(expType));
+                throw new SemanitcException(node.jjtGetFirstToken(),"Incompatible types, variable: "
+                        + node.variableName + " type is: " + SemanticHelper.getStringFromIntType(variable.type) +
+                        " but was assigned type: " + SemanticHelper.getStringFromIntType(expType));
             }
             // 3 Do the assignment
             variable.value = express;
@@ -303,7 +330,11 @@ public class SemanticAnalysisVisitor implements MyGrammarVisitor {
             // check the type
             int functionReturnType = functionCallNode.getFunctionReturnType();
             if (varType != functionReturnType) {
-                throw new RuntimeException("Semantic: Incompatible types, variable: " + node.variableName + " type is: " + variable.type + " but was function return type is: " + SemanticHelper.getStringFromIntType(functionReturnType));
+                throw new SemanitcException(node.jjtGetFirstToken(),
+                        "Incompatible types, variable: " + node.variableName +
+                        " type is: " +SemanticHelper.getStringFromIntType(variable.type) +
+                                " but function return type is: " +
+                                SemanticHelper.getStringFromIntType(functionReturnType));
             }
             // call the function & do the assignment
             variable.value = functionCallNode.jjtAccept(this, data);

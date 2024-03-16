@@ -2,6 +2,7 @@
 /* JavaCCOptions:MULTI=true,NODE_USES_PARSER=false,VISITOR=true,TRACK_TOKENS=true,NODE_PREFIX=AST,NODE_EXTENDS=,NODE_FACTORY=,SUPPORT_CLASS_VISIBILITY_PUBLIC=true */
 package main.jjtree;
 
+import main.Exceptions.SemanitcException;
 import main.SemanticHelper;
 
 public
@@ -22,7 +23,8 @@ class ASTwhileStatement extends SimpleNode {
         int expressionValueType = SemanticHelper.getType(expressionValue);
         if (SemanticHelper.getType(expressionValue) != 3) {
             String expressionType = SemanticHelper.getStringFromIntType(expressionValueType);
-            throw new RuntimeException("ASTifStatement: Expected Boolean value but got: " + expressionType);
+            throw new SemanitcException(this.jjtGetFirstToken(),
+                    "Expected boolean value but got: " + expressionType);
         }
         return (boolean) expressionValue;
     }

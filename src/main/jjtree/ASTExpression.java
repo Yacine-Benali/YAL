@@ -3,7 +3,6 @@
 package main.jjtree;
 
 import main.Exceptions.TypeError;
-import main.SemanticException;
 import main.SemanticHelper;
 
 import java.util.Objects;
@@ -51,7 +50,7 @@ class ASTExpression extends SimpleNode {
     }
 
     private void throwTypeError(int type1, int type2) {
-        System.out.println(this.firstToken.beginLine);
+
         String type1String = SemanticHelper.getStringFromIntType(type1);
         String type2String = SemanticHelper.getStringFromIntType(type2);
         String error = String.format("Unsupported operation %s between types '%s' and '%s'",
@@ -94,7 +93,7 @@ class ASTExpression extends SimpleNode {
                 if (type1 == 2) {
                     if (type2 == 0) res = (String) d1 + String.valueOf((Integer) d2);
                     if (type2 == 1) res = (String) d1 + String.valueOf((Double) d2);
-                    if (type2 == 2) res = (String) d1 + (String) d2;
+                    if (type2 == 2) res = String.format(" %s %s",d1,d2);
                     if (type2 == 3) res = (String) d1 + String.valueOf((Boolean) d2);
                 }
                 if (type1 == 3) {
