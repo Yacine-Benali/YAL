@@ -3,7 +3,6 @@
 package main.jjtree;
 
 import main.SymbolTable;
-import main.models.Function;
 
 public
 class ASTfunctionCall extends SimpleNode {

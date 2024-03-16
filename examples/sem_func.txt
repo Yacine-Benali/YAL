@@ -13,6 +13,6 @@ end
 var
     x:int;
 begin
-    x:=doubleIt(10);
-    print(x);
+
+    print( true || "false");
 end

@@ -2,7 +2,11 @@
 /* JavaCCOptions:MULTI=true,NODE_USES_PARSER=false,VISITOR=true,TRACK_TOKENS=false,NODE_PREFIX=AST,NODE_EXTENDS=,NODE_FACTORY=,SUPPORT_CLASS_VISIBILITY_PUBLIC=true */
 package main.jjtree;
 
+import main.Exceptions.TypeError;
+import main.SemanticException;
 import main.SemanticHelper;
+
+import java.util.Objects;
 
 public
 class ASTExpression extends SimpleNode {
@@ -28,13 +32,10 @@ class ASTExpression extends SimpleNode {
     }
 
 
-
-
-
     public Object UnaryExpression(MyGrammarVisitor visitor, Object data) {
 
         Object res = this.jjtGetChild(0).jjtAccept(visitor, data);
-        if(operator == null) {
+        if (operator == null) {
             // either function call
             // eithe variableid
             // either literalExpression
@@ -49,8 +50,14 @@ class ASTExpression extends SimpleNode {
         return res;
     }
 
+    private void throwTypeError(int type1, int type2) {
+        String type1String = SemanticHelper.getStringFromIntType(type1);
+        String type2String = SemanticHelper.getStringFromIntType(type2);
+        String error = String.format("Unsupported operation %s between types '%s' and '%s'", operator, type1String, type2String);
+        throw new TypeError(error);
+    }
+
     public Object execute(MyGrammarVisitor visitor, Object data) {
-//        System.out.println("execute from " +this + " children.length "+children.length);
         if (isUnary || children.length == 1) {
             return UnaryExpression(visitor, data);
         }
@@ -63,20 +70,24 @@ class ASTExpression extends SimpleNode {
 
         switch (operator) {
             case "+":
-               // System.out.println("going for the Addition");
+                // System.out.println("going for the Addition");
 
                 Object res = null;
                 if (type1 == 0) {
                     if (type2 == 0) res = (Integer) d1 + (Integer) d2;
                     if (type2 == 1) res = (Integer) d1 + (Double) d2;
                     if (type2 == 2) res = String.valueOf((Integer) d1) + (String) d2;
-                    if (type2 == 3) res = (Integer) d1 + ((Boolean) d2 == true ? 1 : 0);
+                    if (type2 == 3)
+                        throwTypeError(type1, type2);
+
                 }
                 if (type1 == 1) {
                     if (type2 == 0) res = (Double) d1 + (Integer) d2;
                     if (type2 == 1) res = (Double) d1 + (Double) d2;
                     if (type2 == 2) res = String.valueOf((Double) d1) + (String) d2;
-                    if (type2 == 3) res = (Double) d1 + ((Boolean) d2 == true ? 1 : 0);
+                    if (type2 == 3)
+                        throwTypeError(type1, type2);
+
                 }
                 if (type1 == 2) {
                     if (type2 == 0) res = (String) d1 + String.valueOf((Integer) d2);
@@ -85,10 +96,11 @@ class ASTExpression extends SimpleNode {
                     if (type2 == 3) res = (String) d1 + String.valueOf((Boolean) d2);
                 }
                 if (type1 == 3) {
-                    if (type2 == 0) res = ((Boolean) d1 == true ? 1 : 0) + (Integer) d2;
-                    if (type2 == 1) res = ((Boolean) d1 == true ? 1 : 0) + (Double) d2;
+                    if (type2 == 0) throwTypeError(type1, type2);
+                    if (type2 == 1) throwTypeError(type1, type2);
                     if (type2 == 2) res = String.valueOf((Boolean) d1) + (String) d2;
-                    if (type2 == 3) res = ((Boolean) d1 == true ? 1 : 0) + ((Boolean) d2 == true ? 1 : 0);
+                    if (type2 == 3)
+                        throwTypeError(type1, type2);
                 }
                 return res;
             case "-":
@@ -96,17 +108,20 @@ class ASTExpression extends SimpleNode {
                 if (type1 == 0) {
                     if (type2 == 0) res = (Integer) d1 - (Integer) d2;
                     if (type2 == 1) res = (Integer) d1 - (Double) d2;
-                    if (type2 == 3) res = (Integer) d1 - ((Boolean) d2 == true ? 1 : 0);
+                    if (type2 == 3) throwTypeError(type1, type2);
                 }
                 if (type1 == 1) {
                     if (type2 == 0) res = (Double) d1 - (Integer) d2;
                     if (type2 == 1) res = (Double) d1 - (Double) d2;
-                    if (type2 == 3) res = (Double) d1 - ((Boolean) d2 == true ? 1 : 0);
+                    if (type2 == 3)
+                        throwTypeError(type1, type2);
                 }
                 if (type1 == 3) {
-                    if (type2 == 0) res = ((Boolean) d1 == true ? 1 : 0) - (Integer) d2;
-                    if (type2 == 1) res = ((Boolean) d1 == true ? 1 : 0) - (Double) d2;
-                    if (type2 == 3) res = ((Boolean) d1 == true ? 1 : 0) - ((Boolean) d2 == true ? 1 : 0);
+                    if (type2 == 0) throwTypeError(type1, type2);
+                    if (type2 == 1)
+                        throwTypeError(type1, type2);
+                    if (type2 == 3)
+                        throwTypeError(type1, type2);
                 }
                 return res;
 
@@ -115,17 +130,17 @@ class ASTExpression extends SimpleNode {
                 if (type1 == 0) {
                     if (type2 == 0) res = (Integer) d1 * (Integer) d2;
                     if (type2 == 1) res = (Integer) d1 * (Double) d2;
-                    if (type2 == 3) res = (Integer) d1 * ((Boolean) d2 == true ? 1 : 0);
+                    if (type2 == 3) throwTypeError(type1, type2);
                 }
                 if (type1 == 1) {
                     if (type2 == 0) res = (Double) d1 * (Integer) d2;
                     if (type2 == 1) res = (Double) d1 * (Double) d2;
-                    if (type2 == 3) res = (Double) d1 * ((Boolean) d2 == true ? 1 : 0);
+                    if (type2 == 3) throwTypeError(type1, type2);
                 }
                 if (type1 == 3) {
-                    if (type2 == 0) res = ((Boolean) d1 == true ? 1 : 0) * (Integer) d2;
-                    if (type2 == 1) res = ((Boolean) d1 == true ? 1 : 0) * (Double) d2;
-                    if (type2 == 3) res = ((Boolean) d1 == true ? 1 : 0) * ((Boolean) d2 == true ? 1 : 0);
+                    if (type2 == 0) throwTypeError(type1, type2);
+                    if (type2 == 1) throwTypeError(type1, type2);
+                    if (type2 == 3) throwTypeError(type1, type2);
                 }
                 return res;
 
@@ -134,17 +149,17 @@ class ASTExpression extends SimpleNode {
                 if (type1 == 0) {
                     if (type2 == 0) res = (Integer) d1 / (Integer) d2;
                     if (type2 == 1) res = (Integer) d1 / (Double) d2;
-                    if (type2 == 3) res = (Integer) d1 / ((Boolean) d2 == true ? 1 : 0);
+                    if (type2 == 3) throwTypeError(type1, type2);
                 }
                 if (type1 == 1) {
                     if (type2 == 0) res = (Double) d1 / (Integer) d2;
                     if (type2 == 1) res = (Double) d1 / (Double) d2;
-                    if (type2 == 3) res = (Double) d1 / ((Boolean) d2 == true ? 1 : 0);
+                    if (type2 == 3) throwTypeError(type1, type2);
                 }
                 if (type1 == 3) {
-                    if (type2 == 0) res = ((Boolean) d1 == true ? 1 : 0) / (Integer) d2;
-                    if (type2 == 1) res = ((Boolean) d1 == true ? 1 : 0) / (Double) d2;
-                    if (type2 == 3) res = ((Boolean) d1 == true ? 1 : 0) / ((Boolean) d2 == true ? 1 : 0);
+                    if (type2 == 0) throwTypeError(type1, type2);
+                    if (type2 == 1) throwTypeError(type1, type2);
+                    if (type2 == 3) throwTypeError(type1, type2);
                 }
                 return res;
 
@@ -154,20 +169,20 @@ class ASTExpression extends SimpleNode {
                 if (type1 == 0) {
                     if (type2 == 0) res = (Integer) d1 < (Integer) d2;
                     if (type2 == 1) res = (Integer) d1 < (Double) d2;
-                    if (type2 == 3) res = (Integer) d1 < ((Boolean) d2 == true ? 1 : 0);
+                    if (type2 == 3) throwTypeError(type1, type2);
                 }
                 if (type1 == 1) {
                     if (type2 == 0) res = (Double) d1 < (Integer) d2;
                     if (type2 == 1) res = (Double) d1 < (Double) d2;
-                    if (type2 == 3) res = (Double) d1 < ((Boolean) d2 == true ? 1 : 0);
+                    if (type2 == 3) throwTypeError(type1, type2);
                 }
                 if (type1 == 2) {
-                    if (type2 == 2) res = null;
+                    if (type2 == 2) throwTypeError(type1, type2);
                 }
                 if (type1 == 3) {
-                    if (type2 == 0) res = ((Boolean) d1 == true ? 1 : 0) < (Integer) d2;
-                    if (type2 == 1) res = ((Boolean) d1 == true ? 1 : 0) < (Double) d2;
-                    if (type2 == 3) res = ((Boolean) d1 == true ? 1 : 0) < ((Boolean) d2 == true ? 1 : 0);
+                    if (type2 == 0) throwTypeError(type1, type2);
+                    if (type2 == 1) throwTypeError(type1, type2);
+                    if (type2 == 3) throwTypeError(type1, type2);
                 }
                 return res;
 
@@ -176,20 +191,20 @@ class ASTExpression extends SimpleNode {
                 if (type1 == 0) {
                     if (type2 == 0) res = (Integer) d1 > (Integer) d2;
                     if (type2 == 1) res = (Integer) d1 > (Double) d2;
-                    if (type2 == 3) res = (Integer) d1 > ((Boolean) d2 == true ? 1 : 0);
+                    if (type2 == 3) throwTypeError(type1, type2);
                 }
                 if (type1 == 1) {
                     if (type2 == 0) res = (Double) d1 > (Integer) d2;
                     if (type2 == 1) res = (Double) d1 > (Double) d2;
-                    if (type2 == 3) res = (Double) d1 > ((Boolean) d2 == true ? 1 : 0);
+                    if (type2 == 3) throwTypeError(type1, type2);
                 }
                 if (type1 == 2) {
-                    if (type2 == 2) res = null;
+                    if (type2 == 2) throwTypeError(type1, type2);
                 }
                 if (type1 == 3) {
-                    if (type2 == 0) res = ((Boolean) d1 == true ? 1 : 0) > (Integer) d2;
-                    if (type2 == 1) res = ((Boolean) d1 == true ? 1 : 0) > (Double) d2;
-                    if (type2 == 3) res = ((Boolean) d1 == true ? 1 : 0) > ((Boolean) d2 == true ? 1 : 0);
+                    if (type2 == 0) throwTypeError(type1, type2);
+                    if (type2 == 1) throwTypeError(type1, type2);
+                    if (type2 == 3) throwTypeError(type1, type2);
                 }
                 return res;
             case "<=":
@@ -197,20 +212,20 @@ class ASTExpression extends SimpleNode {
                 if (type1 == 0) {
                     if (type2 == 0) res = (Integer) d1 <= (Integer) d2;
                     if (type2 == 1) res = (Integer) d1 <= (Double) d2;
-                    if (type2 == 3) res = (Integer) d1 < ((Boolean) d2 == true ? 1 : 0);
+                    if (type2 == 3) throwTypeError(type1, type2);
                 }
                 if (type1 == 1) {
                     if (type2 == 0) res = (Double) d1 <= (Integer) d2;
                     if (type2 == 1) res = (Double) d1 <= (Double) d2;
-                    if (type2 == 3) res = (Double) d1 <= ((Boolean) d2 == true ? 1 : 0);
+                    if (type2 == 3) throwTypeError(type1, type2);
                 }
                 if (type1 == 2) {
-                    if (type2 == 2) res = null;
+                    if (type2 == 2) throwTypeError(type1, type2);
                 }
                 if (type1 == 3) {
                     if (type2 == 0) res = ((Boolean) d1 == true ? 1 : 0) <= (Integer) d2;
                     if (type2 == 1) res = ((Boolean) d1 == true ? 1 : 0) <= (Double) d2;
-                    if (type2 == 3) res = ((Boolean) d1 == true ? 1 : 0) <= ((Boolean) d2 == true ? 1 : 0);
+                    if (type2 == 3) throwTypeError(type1, type2);
                 }
                 return res;
             case ">=":
@@ -218,46 +233,46 @@ class ASTExpression extends SimpleNode {
                 if (type1 == 0) {
                     if (type2 == 0) res = (Integer) d1 >= (Integer) d2;
                     if (type2 == 1) res = (Integer) d1 >= (Double) d2;
-                    if (type2 == 3) res = (Integer) d1 >= ((Boolean) d2 == true ? 1 : 0);
+                    if (type2 == 3) throwTypeError(type1, type2);
                 }
                 if (type1 == 1) {
                     if (type2 == 0) res = (Double) d1 >= (Integer) d2;
                     if (type2 == 1) res = (Double) d1 >= (Double) d2;
-                    if (type2 == 3) res = (Double) d1 >= ((Boolean) d2 == true ? 1 : 0);
+                    if (type2 == 3) throwTypeError(type1, type2);
                 }
                 if (type1 == 2) {
-                    if (type2 == 2) res = null;
+                    if (type2 == 2) throwTypeError(type1, type2);
                 }
                 if (type1 == 3) {
                     if (type2 == 0) res = ((Boolean) d1 == true ? 1 : 0) >= (Integer) d2;
                     if (type2 == 1) res = ((Boolean) d1 == true ? 1 : 0) >= (Double) d2;
-                    if (type2 == 3) res = ((Boolean) d1 == true ? 1 : 0) >= ((Boolean) d2 == true ? 1 : 0);
+                    if (type2 == 3) throwTypeError(type1, type2);
                 }
                 return res;
             case "==":
                 res = null;
                 if (type1 == 0) {
                     if (type2 == 0) res = (Integer) d1 == (Integer) d2;
-                    if (type2 == 1) res = ((Integer) d1).equals((Double) d2);
-                    if (type2 == 2) res = String.valueOf((Integer) d1) == (String) d2;
-                    if (type2 == 3) res = (Integer) d1 == ((Boolean) d2 == true ? 1 : 0);
+                    if (type2 == 1) throwTypeError(type1, type2);
+                    if (type2 == 2) throwTypeError(type1, type2);
+                    if (type2 == 3) throwTypeError(type1, type2);
                 }
                 if (type1 == 1) {
                     if (type2 == 0) res = ((Double) d1).equals((Integer) d2);
-                    if (type2 == 1) res = (Double) d1 == (Double) d2;
-                    if (type2 == 2) res = String.valueOf((Double) d1) == (String) d2;
-                    if (type2 == 3) res = (Double) d1 == ((Boolean) d2 == true ? 1 : 0);
+                    if (type2 == 1) throwTypeError(type1, type2);
+                    if (type2 == 2) throwTypeError(type1, type2);
+                    if (type2 == 3) throwTypeError(type1, type2);
                 }
                 if (type1 == 2) {
-                    if (type2 == 0) res = (String) d1 == String.valueOf((Integer) d2);
-                    if (type2 == 1) res = (String) d1 == String.valueOf((Double) d2);
-                    if (type2 == 2) res = (String) d1 == (String) d2;
-                    if (type2 == 3) res = (String) d1 == String.valueOf((Boolean) d2);
+                    if (type2 == 0) throwTypeError(type1, type2);
+                    if (type2 == 1) throwTypeError(type1, type2);
+                    if (type2 == 2) res = Objects.equals((String) d1, (String) d2);
+                    if (type2 == 3) throwTypeError(type1, type2);
                 }
                 if (type1 == 3) {
-                    if (type2 == 0) res = ((Boolean) d1 == true ? 1 : 0) == (Integer) d2;
-                    if (type2 == 1) res = ((Boolean) d1 == true ? 1 : 0) == (Double) d2;
-                    if (type2 == 2) res = String.valueOf((Boolean) d1) == (String) d2;
+                    if (type2 == 0) throwTypeError(type1, type2);
+                    if (type2 == 1) throwTypeError(type1, type2);
+                    if (type2 == 2) throwTypeError(type1, type2);
                     if (type2 == 3) res = ((Boolean) d1 == true ? 1 : 0) == ((Boolean) d2 == true ? 1 : 0);
                 }
                 return res;
@@ -266,39 +281,41 @@ class ASTExpression extends SimpleNode {
                 if (type1 == 0) {
                     if (type2 == 0) res = (Integer) d1 != (Integer) d2;
                     if (type2 == 1) res = !((Integer) d1).equals((Double) d2);
-                    ;
-                    if (type2 == 2) res = String.valueOf((Integer) d1) != (String) d2;
-                    if (type2 == 3) res = (Integer) d1 != ((Boolean) d2 == true ? 1 : 0);
+                    if (type2 == 2) throwTypeError(type1,type2);
+                    if (type2 == 3) throwTypeError(type1,type2);
                 }
                 if (type1 == 1) {
                     if (type2 == 0) res = !((Double) d1).equals((Integer) d2);
-                    ;
                     if (type2 == 1) res = (Double) d1 != (Double) d2;
-                    if (type2 == 2) res = String.valueOf((Double) d1) != (String) d2;
-                    if (type2 == 3) res = (Double) d1 != ((Boolean) d2 == true ? 1 : 0);
+                    if (type2 == 2) throwTypeError(type1,type2);
+                    if (type2 == 3) throwTypeError(type1,type2);
                 }
                 if (type1 == 2) {
-                    if (type2 == 0) res = (String) d1 != String.valueOf((Integer) d2);
-                    if (type2 == 1) res = (String) d1 != String.valueOf((Double) d2);
-                    if (type2 == 2) res = (String) d1 != (String) d2;
-                    if (type2 == 3) res = (String) d1 != String.valueOf((Boolean) d2);
+                    if (type2 == 0) throwTypeError(type1,type2);
+                    if (type2 == 1) throwTypeError(type1,type2);
+                    if (type2 == 2) res = !Objects.equals((String) d1, (String) d2);
+                    if (type2 == 3) throwTypeError(type1,type2);
                 }
                 if (type1 == 3) {
-                    if (type2 == 0) res = ((Boolean) d1 == true ? 1 : 0) != (Integer) d2;
-                    if (type2 == 1) res = ((Boolean) d1 == true ? 1 : 0) != (Double) d2;
-                    if (type2 == 2) res = String.valueOf((Boolean) d1) != (String) d2;
+                    if (type2 == 0) throwTypeError(type1,type2);
+                    if (type2 == 1) throwTypeError(type1,type2);
+                    if (type2 == 2) throwTypeError(type1,type2);
                     if (type2 == 3) res = ((Boolean) d1 == true ? 1 : 0) != ((Boolean) d2 == true ? 1 : 0);
                 }
                 return res;
 
             case "&&":
                 res = null;
+                if(type1 != 3 || type2 != 3 )
+                    throwTypeError(type1,type2);
                 boolean bo1 = SemanticHelper.getSolve(d1);
                 boolean bo2 = SemanticHelper.getSolve(d2);
                 res = bo1 && bo2;
                 return res;
             case "||":
                 res = null;
+                if(type1 != 3 || type2 != 3 )
+                    throwTypeError(type1,type2);
                 bo1 = SemanticHelper.getSolve(d1);
                 bo2 = SemanticHelper.getSolve(d2);
                 res = bo1 || bo2;
