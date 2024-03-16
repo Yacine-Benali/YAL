@@ -16,8 +16,7 @@ class ASTsimpleStatement extends SimpleNode {
   /** Accept the visitor. **/
   public Object jjtAccept(MyGrammarVisitor visitor, Object data) {
 
-    return
-    visitor.visit(this, data);
+    return visitor.visit(this, data);
   }
 }
 /* JavaCC - OriginalChecksum=982c89d13c9b70f8828445e2c4505474 (do not edit this line) */

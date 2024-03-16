@@ -82,29 +82,31 @@ TOKEN : {
 |   < #DIGIT : ["0"-"9"] >
 |   < INT : (<DIGIT>)+ >
 |   < REAL : <INT> "." <INT> >
+|    < BOOL : "true" | "false">
 //|   < NUMBER : (<DIGIT>)+ |  (<DIGIT>)+ "." (<DIGIT>)+ >
 }
 TOKEN : { /* TYPES */
-    <INT_KEYWORD : "int" >
+    < INT_KEYWORD : "int" >
 |   < REAL_KEYWORD : "real" >
 |   < STRING_KEYWORD : "string" >
 |   < BOOL_KEYWORD : "bool" >
 //|   < NUMBER_KEYWORD : "number" >
 }
 TOKEN : { /* KEYWORDS */
-    < BOOL : "true" | "false">
-|   < PRINT : "print" >
-|   < PROGRAM : "program" >
+    < PROGRAM : "program" >
 |   < FUNCTION : "function" >
 |   < PROCEDURE : "procedure" >
 |   < VAR : "var" >
 |   < BEGIN : "begin" >
 |   < END : "end" >
 |   < WHILE : "while" >
+|   < BREAK : "break">
 |   < DO : "do" >
 |   < IF : "if" >
 |   < THEN : "then" >
 |   < ELSE : "else" >
+// add a seprate section for built-in function when you have more then one
+|   < PRINT : "print" >
 }
 TOKEN : { /* operators*/
     < NOT : "!" >
@@ -729,6 +731,7 @@ void simpleStatement() :
         parser cant tell the diff between assignment and procedureCall
         because they both start with Identifier
     */
+    break2() |
     printCall() |
     LOOKAHEAD(2) assignmentStatement() <SEMICOLON> |
     procedureCall() <SEMICOLON>/*@bgen(jjtree)*/
@@ -746,6 +749,22 @@ void simpleStatement() :
         throw (ParseException)jjte000;
       }
       throw (Error)jjte000;
+    } finally {
+      if (jjtc000) {
+        jjtree.closeNodeScope(jjtn000, true);
+      }
+    }
+/*@egen*/
+}
+void break2():{/*@bgen(jjtree) break2 */
+  ASTbreak2 jjtn000 = new ASTbreak2(JJTBREAK2);
+  boolean jjtc000 = true;
+  jjtree.openNodeScope(jjtn000);
+/*@egen*/}
+{/*@bgen(jjtree) break2 */
+    try {
+/*@egen*/
+    <BREAK> <SEMICOLON>/*@bgen(jjtree)*/
     } finally {
       if (jjtc000) {
         jjtree.closeNodeScope(jjtn000, true);

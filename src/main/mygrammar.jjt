@@ -78,29 +78,31 @@ TOKEN : {
 |   < #DIGIT : ["0"-"9"] >
 |   < INT : (<DIGIT>)+ >
 |   < REAL : <INT> "." <INT> >
+|    < BOOL : "true" | "false">
 //|   < NUMBER : (<DIGIT>)+ |  (<DIGIT>)+ "." (<DIGIT>)+ >
 }
 TOKEN : { /* TYPES */
-    <INT_KEYWORD : "int" >
+    < INT_KEYWORD : "int" >
 |   < REAL_KEYWORD : "real" >
 |   < STRING_KEYWORD : "string" >
 |   < BOOL_KEYWORD : "bool" >
 //|   < NUMBER_KEYWORD : "number" >
 }
 TOKEN : { /* KEYWORDS */
-    < BOOL : "true" | "false">
-|   < PRINT : "print" >
-|   < PROGRAM : "program" >
+    < PROGRAM : "program" >
 |   < FUNCTION : "function" >
 |   < PROCEDURE : "procedure" >
 |   < VAR : "var" >
 |   < BEGIN : "begin" >
 |   < END : "end" >
 |   < WHILE : "while" >
+|   < BREAK : "break">
 |   < DO : "do" >
 |   < IF : "if" >
 |   < THEN : "then" >
 |   < ELSE : "else" >
+// add a seprate section for built-in function when you have more then one
+|   < PRINT : "print" >
 }
 TOKEN : { /* operators*/
     < NOT : "!" >
@@ -278,9 +280,14 @@ void simpleStatement() :
         parser cant tell the diff between assignment and procedureCall
         because they both start with Identifier
     */
+    break2() |
     printCall() |
     LOOKAHEAD(2) assignmentStatement() <SEMICOLON> |
     procedureCall() <SEMICOLON>
+}
+void break2():{}
+{
+    <BREAK> <SEMICOLON>
 }
 
 void printCall():{}

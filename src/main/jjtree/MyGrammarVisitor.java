@@ -21,6 +21,7 @@ public interface MyGrammarVisitor
   public Object visit(ASTstatementSequence node, Object data);
   public Object visit(ASTstatement node, Object data);
   public Object visit(ASTsimpleStatement node, Object data);
+  public Object visit(ASTbreak2 node, Object data);
   public Object visit(ASTprintCall node, Object data);
   public Object visit(ASTassignmentStatement node, Object data);
   public Object visit(ASTprocedureCall node, Object data);
@@ -44,4 +45,4 @@ public interface MyGrammarVisitor
   public Object visit(ASTactualParameterList node, Object data);
   public Object visit(ASTactualParameter node, Object data);
 }
-/* JavaCC - OriginalChecksum=b49aa52c9a12468731f74b0c36d7ca9e (do not edit this line) */
+/* JavaCC - OriginalChecksum=a216e388850b72f26235097d44d274da (do not edit this line) */

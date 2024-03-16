@@ -11,6 +11,10 @@ begin
     while x > 0 do
         begin
             print(x);
+            if x == 3 then
+                begin
+                    break;
+                end
             x := x -1;
         end
 end
