@@ -61,39 +61,39 @@ public interface MyGrammarConstants {
   /** RegularExpression Id. */
   int AND = 31;
   /** RegularExpression Id. */
-  int IDENTIFIER = 32;
+  int PLUS = 32;
   /** RegularExpression Id. */
-  int ASSIGN = 33;
+  int MINUS = 33;
   /** RegularExpression Id. */
-  int LPAREN = 34;
+  int MULTIPLY = 34;
   /** RegularExpression Id. */
-  int RPAREN = 35;
+  int DIVIDE = 35;
   /** RegularExpression Id. */
-  int COMMA = 36;
+  int LESS = 36;
   /** RegularExpression Id. */
-  int COLON = 37;
+  int GREATER = 37;
   /** RegularExpression Id. */
-  int SEMICOLON = 38;
+  int LESSEQUAL = 38;
   /** RegularExpression Id. */
-  int PLUS = 39;
+  int GREATEREQUAL = 39;
   /** RegularExpression Id. */
-  int MINUS = 40;
+  int EQUAL = 40;
   /** RegularExpression Id. */
-  int MULTIPLY = 41;
+  int NOTEQUAL = 41;
   /** RegularExpression Id. */
-  int DIVIDE = 42;
+  int ASSIGN = 42;
   /** RegularExpression Id. */
-  int LESS = 43;
+  int LPAREN = 43;
   /** RegularExpression Id. */
-  int GREATER = 44;
+  int RPAREN = 44;
   /** RegularExpression Id. */
-  int LESSEQUAL = 45;
+  int COMMA = 45;
   /** RegularExpression Id. */
-  int GREATEREQUAL = 46;
+  int COLON = 46;
   /** RegularExpression Id. */
-  int EQUAL = 47;
+  int SEMICOLON = 47;
   /** RegularExpression Id. */
-  int NOTEQUAL = 48;
+  int IDENTIFIER = 48;
   /** RegularExpression Id. */
   int STRING = 49;
 
@@ -134,13 +134,6 @@ public interface MyGrammarConstants {
     "\"!\"",
     "\"||\"",
     "\"&&\"",
-    "<IDENTIFIER>",
-    "\":=\"",
-    "\"(\"",
-    "\")\"",
-    "\",\"",
-    "\":\"",
-    "\";\"",
     "\"+\"",
     "\"-\"",
     "\"*\"",
@@ -151,6 +144,13 @@ public interface MyGrammarConstants {
     "\">=\"",
     "\"==\"",
     "\"!=\"",
+    "\":=\"",
+    "\"(\"",
+    "\")\"",
+    "\",\"",
+    "\":\"",
+    "\";\"",
+    "<IDENTIFIER>",
     "<STRING>",
   };
 

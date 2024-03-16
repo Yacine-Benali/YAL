@@ -79,12 +79,16 @@ TOKEN : {
 |   < INT : (<DIGIT>)+ >
 |   < REAL : <INT> "." <INT> >
 //|   < NUMBER : (<DIGIT>)+ |  (<DIGIT>)+ "." (<DIGIT>)+ >
-|   < INT_KEYWORD : "int" >
+}
+TOKEN : { /* TYPES */
+    <INT_KEYWORD : "int" >
 |   < REAL_KEYWORD : "real" >
-//|   < NUMBER_KEYWORD : "number" >
 |   < STRING_KEYWORD : "string" >
 |   < BOOL_KEYWORD : "bool" >
-|   < BOOL : "true" | "false">
+//|   < NUMBER_KEYWORD : "number" >
+}
+TOKEN : { /* KEYWORDS */
+    < BOOL : "true" | "false">
 |   < PRINT : "print" >
 |   < PROGRAM : "program" >
 |   < FUNCTION : "function" >
@@ -97,19 +101,11 @@ TOKEN : {
 |   < IF : "if" >
 |   < THEN : "then" >
 |   < ELSE : "else" >
-|   < NOT : "!" >
+}
+TOKEN : { /* operators*/
+    < NOT : "!" >
 |   < OR : "||" >
 |   < AND : "&&" >
-// identifier is last else it will also match the above strings
-|   < IDENTIFIER :
-        <MINLETTER> (<MINLETTER> | <CAPLETTER>| <DIGIT>)*
-    >
-|   < ASSIGN : ":=" >
-|   < LPAREN : "(" >
-|   < RPAREN : ")" >
-|   < COMMA : "," >
-|   <COLON : ":">
-|   < SEMICOLON : ";" >
 |   < PLUS : "+" >
 |   < MINUS : "-" >
 |   < MULTIPLY : "*" >
@@ -120,7 +116,23 @@ TOKEN : {
 |   < GREATEREQUAL : ">=" >
 |   < EQUAL : "==" >
 |   < NOTEQUAL : "!=" >
-/*
+}
+TOKEN : {/* chars */
+    < ASSIGN : ":=" >
+|   < LPAREN : "(" >
+|   < RPAREN : ")" >
+|   < COMMA : "," >
+|   < COLON : ":">
+|   < SEMICOLON : ";" >
+}
+
+TOKEN : { /* others */
+// identifier is last else it will also match the above strings
+   < IDENTIFIER :
+        <MINLETTER> (<MINLETTER> | <CAPLETTER>| <DIGIT>)*
+    >
+
+/**
   Double Quotes: The string starts and ends with a double quote (\").
 
   Character Matching: Inside the string, you can have any character except a double quote or a backslash (~["\"","\\"]). This is to ensure that the parser does not prematurely end the string or misinterpret a backslash.
@@ -143,6 +155,7 @@ TOKEN : {
         )*
         "\""
     >
+
 }
 
 
