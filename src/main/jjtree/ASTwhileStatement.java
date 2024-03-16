@@ -2,6 +2,8 @@
 /* JavaCCOptions:MULTI=true,NODE_USES_PARSER=false,VISITOR=true,TRACK_TOKENS=false,NODE_PREFIX=AST,NODE_EXTENDS=,NODE_FACTORY=,SUPPORT_CLASS_VISIBILITY_PUBLIC=true */
 package main.jjtree;
 
+import main.SemanticHelper;
+
 public
 class ASTwhileStatement extends SimpleNode {
   public ASTwhileStatement(int id) {
@@ -13,11 +15,35 @@ class ASTwhileStatement extends SimpleNode {
   }
 
 
+  private boolean getExpressionValue(MyGrammarVisitor visitor, Object data)
+  {
+    // first child is the expression
+    Object expressionValue = this.jjtGetChild(0).jjtAccept(visitor,data);
+    // check if the expression is of a boolean value
+    int expressionValueType = SemanticHelper.getType(expressionValue);
+    if (SemanticHelper.getType(expressionValue) !=  3)
+    {
+      String expressionType = SemanticHelper.getStringFromIntType(expressionValueType);
+      throw new RuntimeException("ASTifStatement: Expected Boolean value but got: " +expressionType);
+    }
+    return (boolean) expressionValue;
+  }
   /** Accept the visitor. **/
   public Object jjtAccept(MyGrammarVisitor visitor, Object data) {
+    System.out.println("ASTwhileStatement");
+    // first child is the expression get its boolean value
+    boolean expressionValueBool = getExpressionValue(visitor,data);
+    while(expressionValueBool){
+      // get the block and execute it
+      Object object = this.jjtGetChild(1).jjtAccept(visitor,data);
+//      if( object!=null && object instanceof String)
+//        if(((String)object).equals("Break"))
+//          break;
+      // get the expression and execute it again
+      expressionValueBool = getExpressionValue(visitor,data);
+    }
+    return null;
 
-    return
-    visitor.visit(this, data);
   }
 }
 /* JavaCC - OriginalChecksum=cad2f9059936c25b3918da517f0007a9 (do not edit this line) */

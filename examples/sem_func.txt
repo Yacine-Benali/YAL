@@ -7,17 +7,10 @@ end
 var
 x:int;
 begin
-    x:= 5+2;
-    if true then
-    begin
-         if true then
-            begin
-                 if true then
-                    begin
-                        print(x);
-                    end
-                end
-            end
+    x := 10;
+    while x > 0 do
+        begin
+            print(x);
+            x := x -1;
         end
-    end
 end

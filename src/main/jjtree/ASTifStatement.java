@@ -17,18 +17,19 @@ class ASTifStatement extends SimpleNode {
 
   /** Accept the visitor. **/
   public Object jjtAccept(MyGrammarVisitor visitor, Object data) {
+
     // first child is the expression
-    Object ob = this.jjtGetChild(0).jjtAccept(visitor,data);
+    Object expressionValue = this.jjtGetChild(0).jjtAccept(visitor,data);
     // check if the expression is of a boolean value
-    int obType = SemanticHelper.getType(ob);
-    if (SemanticHelper.getType(ob) !=  3)
+    int expressionValueType = SemanticHelper.getType(expressionValue);
+    if (SemanticHelper.getType(expressionValue) !=  3)
     {
-      String expressionType = SemanticHelper.getStringFromIntType(obType);
+      String expressionType = SemanticHelper.getStringFromIntType(expressionValueType);
       throw new RuntimeException("ASTifStatement: Expected Boolean value but got: " +expressionType);
     }
-    Boolean bo = (Boolean) ob;
+    Boolean expressionValueBool = (Boolean) expressionValue;
     Object res = null;
-    if (bo)
+    if (expressionValueBool)
       // if true execute the second child which is the Block
       res = this.jjtGetChild(1).jjtAccept(visitor,data);
     else if (this.children.length > 2)
