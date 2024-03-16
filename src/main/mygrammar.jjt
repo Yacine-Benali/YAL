@@ -85,6 +85,7 @@ TOKEN : {
 |   < STRING_KEYWORD : "string" >
 |   < BOOL_KEYWORD : "bool" >
 |   < BOOL : "true" | "false">
+|   < PRINT : "print" >
 |   < PROGRAM : "program" >
 |   < FUNCTION : "function" >
 |   < PROCEDURE : "procedure" >
@@ -264,7 +265,14 @@ void simpleStatement() :
         parser cant tell the diff between assignment and procedureCall
         because they both start with Identifier
     */
-    LOOKAHEAD(2) assignmentStatement() <SEMICOLON> | procedureCall() <SEMICOLON>
+    printCall() |
+    LOOKAHEAD(2) assignmentStatement() <SEMICOLON> |
+    procedureCall() <SEMICOLON>
+}
+
+void printCall():{}
+{
+    <PRINT> <LPAREN> Expression() <RPAREN> <SEMICOLON>
 }
 
 void assignmentStatement() : {String variableName; }

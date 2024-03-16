@@ -52,5 +52,12 @@ class ASTLiteralExpression extends ASTExpression {
   public Object jjtAccept(MyGrammarVisitor visitor, Object data) {
     return value;
   }
+
+  @Override
+  public String toString() {
+    return "ASTLiteralExpression{" +
+            "value=" + value +
+            '}';
+  }
 }
 /* JavaCC - OriginalChecksum=399f4d36f20ed9c6768df46c70c5d689 (do not edit this line) */

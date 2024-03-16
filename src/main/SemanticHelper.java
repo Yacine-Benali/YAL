@@ -36,6 +36,15 @@ public class SemanticHelper {
         return -1;
     }
 
+    public static boolean getSolve(Object ob) {
+        int type = SemanticHelper.getType(ob);
+        boolean bo = true;
+        if (type == 0 && ((Integer) ob).equals(0)) bo = false;
+        if (type == 1 && (Double) ob == 0) bo = false;
+        if (type == 3 && (Boolean) ob == false) bo = false;
+        return bo;
+    }
+
     static public List<Integer> getTypesFromActualParameters(ASTactualParameterList actualParamList) {
         List<Integer> actualParamTypes = new ArrayList<>();
         for (int i = 0; i < actualParamList.jjtGetNumChildren(); i++) {

@@ -2,6 +2,8 @@
 /* JavaCCOptions:MULTI=true,NODE_USES_PARSER=false,VISITOR=true,TRACK_TOKENS=false,NODE_PREFIX=AST,NODE_EXTENDS=,NODE_FACTORY=,SUPPORT_CLASS_VISIBILITY_PUBLIC=true */
 package main.jjtree;
 
+import main.SemanticHelper;
+
 public
 class ASTifStatement extends SimpleNode {
   public ASTifStatement(int id) {
@@ -15,9 +17,25 @@ class ASTifStatement extends SimpleNode {
 
   /** Accept the visitor. **/
   public Object jjtAccept(MyGrammarVisitor visitor, Object data) {
+    // first child is the expression
+    Object ob = this.jjtGetChild(0).jjtAccept(visitor,data);
+    int obType = SemanticHelper.getType(ob);
+    if (SemanticHelper.getType(ob) !=  3)
+    {
+      String expressionType = SemanticHelper.getStringFromIntType(obType);
+      throw new RuntimeException("ASTifStatement: Expected Boolean value but got: " +expressionType);
+    }
+    boolean bo = SemanticHelper.getSolve(ob);
+    Object res =null;
+    if (bo)
+      // if true execute the second child which is the Block
+      res = this.jjtGetChild(1).jjtAccept(visitor,data);
+    else if (this.children.length > 2)
+      // if the statement has an Else part
+      res = this.jjtGetChild(2).jjtAccept(visitor,data);
+    return res;
 
-    return
-    visitor.visit(this, data);
+    // return visitor.visit(this, data);
   }
 }
 /* JavaCC - OriginalChecksum=6ef18f57fac14fcf5972cb21ae274e32 (do not edit this line) */

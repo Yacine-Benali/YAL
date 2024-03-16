@@ -4,8 +4,6 @@ package main.jjtree;
 
 import main.SemanticHelper;
 
-import java.beans.Expression;
-
 public
 class ASTExpression extends SimpleNode {
 
@@ -31,14 +29,7 @@ class ASTExpression extends SimpleNode {
 
 
 
-    public boolean getSolve(Object ob) {
-        int type = SemanticHelper.getType(ob);
-        boolean bo = true;
-        if (type == 0 && ((Integer) ob).equals(0)) bo = false;
-        if (type == 1 && (Double) ob == 0) bo = false;
-        if (type == 3 && (Boolean) ob == false) bo = false;
-        return bo;
-    }
+
 
     public Object UnaryExpression(MyGrammarVisitor visitor, Object data) {
 
@@ -52,7 +43,7 @@ class ASTExpression extends SimpleNode {
         }
         int type1 = SemanticHelper.getType(res);
         if (operator.equals("!")) {
-            res = getSolve(res);
+            res = SemanticHelper.getSolve(res);
             res = !((Boolean) res);
         }
         return res;
@@ -302,14 +293,14 @@ class ASTExpression extends SimpleNode {
 
             case "&&":
                 res = null;
-                boolean bo1 = getSolve(d1);
-                boolean bo2 = getSolve(d2);
+                boolean bo1 = SemanticHelper.getSolve(d1);
+                boolean bo2 = SemanticHelper.getSolve(d2);
                 res = bo1 && bo2;
                 return res;
             case "||":
                 res = null;
-                bo1 = getSolve(d1);
-                bo2 = getSolve(d2);
+                bo1 = SemanticHelper.getSolve(d1);
+                bo2 = SemanticHelper.getSolve(d2);
                 res = bo1 || bo2;
                 return res;
         }

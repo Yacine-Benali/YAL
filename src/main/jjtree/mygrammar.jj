@@ -89,6 +89,7 @@ TOKEN : {
 |   < STRING_KEYWORD : "string" >
 |   < BOOL_KEYWORD : "bool" >
 |   < BOOL : "true" | "false">
+|   < PRINT : "print" >
 |   < PROGRAM : "program" >
 |   < FUNCTION : "function" >
 |   < PROCEDURE : "procedure" >
@@ -715,7 +716,40 @@ void simpleStatement() :
         parser cant tell the diff between assignment and procedureCall
         because they both start with Identifier
     */
-    LOOKAHEAD(2) assignmentStatement() <SEMICOLON> | procedureCall() <SEMICOLON>/*@bgen(jjtree)*/
+    printCall() |
+    LOOKAHEAD(2) assignmentStatement() <SEMICOLON> |
+    procedureCall() <SEMICOLON>/*@bgen(jjtree)*/
+    } catch (Throwable jjte000) {
+      if (jjtc000) {
+        jjtree.clearNodeScope(jjtn000);
+        jjtc000 = false;
+      } else {
+        jjtree.popNode();
+      }
+      if (jjte000 instanceof RuntimeException) {
+        throw (RuntimeException)jjte000;
+      }
+      if (jjte000 instanceof ParseException) {
+        throw (ParseException)jjte000;
+      }
+      throw (Error)jjte000;
+    } finally {
+      if (jjtc000) {
+        jjtree.closeNodeScope(jjtn000, true);
+      }
+    }
+/*@egen*/
+}
+
+void printCall():{/*@bgen(jjtree) printCall */
+  ASTprintCall jjtn000 = new ASTprintCall(JJTPRINTCALL);
+  boolean jjtc000 = true;
+  jjtree.openNodeScope(jjtn000);
+/*@egen*/}
+{/*@bgen(jjtree) printCall */
+    try {
+/*@egen*/
+    <PRINT> <LPAREN> Expression() <RPAREN> <SEMICOLON>/*@bgen(jjtree)*/
     } catch (Throwable jjte000) {
       if (jjtc000) {
         jjtree.clearNodeScope(jjtn000);

@@ -7,5 +7,17 @@ end
 var
 x:int;
 begin
-x:= 5 / 0;
+    x:= 5+2;
+    if true then
+    begin
+         if true then
+            begin
+                 if true then
+                    begin
+                        print(x);
+                    end
+                end
+            end
+        end
+    end
 end

@@ -147,6 +147,11 @@ public class SemanticAnalysisVisitor implements MyGrammarVisitor {
     }
 
     @Override
+    public Object visit(ASTprintCall node, Object data) {
+        return null;
+    }
+
+    @Override
     public Object visit(ASTprocedureCall node, Object data) {
 
         // Check if procedure is declared
