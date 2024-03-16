@@ -22,7 +22,7 @@ class ASTN extends ASTExpression {
   public Object jjtAccept(MyGrammarVisitor visitor, Object data) {
     if(isVariable)
     {
-      Variable variable = SymbolTable.symbolTable.getVariableDeclaration(variableName);
+      Variable variable = SymbolTable.symbolTable.getVariable(variableName);
       return variable.value;
     }
     return execute(visitor, data);

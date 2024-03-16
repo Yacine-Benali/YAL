@@ -101,6 +101,7 @@ TOKEN : { /* KEYWORDS */
 |   < IF : "if" >
 |   < THEN : "then" >
 |   < ELSE : "else" >
+|   < RESULT:"Result">
 // add a seprate section for built-in function when you have more then one
 |   < PRINT : "print" >
 }
@@ -187,9 +188,9 @@ void functionHeading() #functionHeading :
 {
     <FUNCTION> functionName=identifier() [formalParameterList()] <COLON> returnType=typeIdentifier()
     {
-        jjtThis.functionName = functionName.image;
-        jjtThis.setReturnType(returnType.image);
-    }
+    jjtThis.name = functionName.image;
+    jjtThis.setReturnType(returnType.image);
+}
 }
 
 void functionBody() :
@@ -356,7 +357,8 @@ Token identifier() :
 String variableIdentifier() :
 {Token t;}
 {
-    t=identifier() {return t.image;}
+      t=identifier() {return t.image;}
+    | t=<RESULT> {return t.image;}
 }
 
 
@@ -464,7 +466,7 @@ void functionCall() :
 {Token id;}
 {
     id=identifier() actualParameterList()
-   {jjtThis.functionName = id.image;}
+   {jjtThis.name = id.image;}
 }
 
 void actualParameterList() :

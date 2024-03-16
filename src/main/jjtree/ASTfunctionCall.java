@@ -3,34 +3,32 @@
 package main.jjtree;
 
 import main.SymbolTable;
+import main.models.Function;
 
 public
 class ASTfunctionCall extends SimpleNode {
 
-  public String functionName;
-  public ASTfunctionCall(int id) {
-    super(id);
-  }
+    public String name;
 
-  public ASTfunctionCall(MyGrammar p, int id) {
-    super(p, id);
-  }
-
-  public int getFunctionReturnType()
-  {
-    // Check if function is declared
-    if (!SymbolTable.symbolTable.doesFunctionExist(functionName)) {
-      System.err.println("Semantic: Undeclared function used: " + functionName);
-      System.exit(1);
+    public ASTfunctionCall(int id) {
+        super(id);
     }
-    ASTfunctionHeading functionHeading = SymbolTable.symbolTable.getFunctionHeading(functionName);
-    return functionHeading.returnType;
-  }
 
-  /** Accept the visitor. **/
-  public Object jjtAccept(MyGrammarVisitor visitor, Object data) {
+    public ASTfunctionCall(MyGrammar p, int id) {
+        super(p, id);
+    }
 
-    return     visitor.visit(this, data);
-  }
+    public int getFunctionReturnType() {
+        // will throw if function undeclared
+        return SymbolTable.symbolTable.getFunction(name).heading.returnType;
+    }
+
+    /**
+     * Accept the visitor.
+     **/
+    public Object jjtAccept(MyGrammarVisitor visitor, Object data) {
+
+        return visitor.visit(this, data);
+    }
 }
 /* JavaCC - OriginalChecksum=eca91342669d3f0d5cc0e2d7d4d7b32b (do not edit this line) */

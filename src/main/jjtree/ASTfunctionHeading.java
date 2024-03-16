@@ -11,7 +11,7 @@ import java.util.List;
 public
 class ASTfunctionHeading extends SimpleNode {
 
-    public String functionName;
+    public String name;
     public int returnType;
     public List<Parameter> parameters = new ArrayList<Parameter>();
 
@@ -50,7 +50,7 @@ class ASTfunctionHeading extends SimpleNode {
     @Override
     public String toString() {
         return "ASTfunctionHeading{" +
-                "functionName='" + functionName + '\'' +
+                "functionName='" + name + '\'' +
                 ", returnType='" + SemanticHelper.getStringFromIntType(returnType) + '\'' +
                 ", parameters=" + parameters +
                 '}';

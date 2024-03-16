@@ -1,6 +1,7 @@
 package main;
 
 import main.jjtree.*;
+import main.models.Function;
 import main.models.Parameter;
 import main.models.Procedure;
 import main.models.Variable;
@@ -31,41 +32,11 @@ public class SemanticAnalysisVisitor implements MyGrammarVisitor {
 
     @Override
     public Object visit(ASTprogramHeading node, Object data) {
-
-        return node.childrenAccept(this, data);
-    }
-
-    @Override
-    public Object visit(ASTfunctionDeclaration node, Object data) {
-
-        return node.childrenAccept(this, data);
-    }
-
-    @Override
-    public Object visit(ASTfunctionHeading node, Object data) {
-
-        Node formalParamList = node.jjtGetChild(1);
-
-        if (formalParamList instanceof ASTformalParameterList) {
-            List<Parameter> list = SemanticHelper.getParamsFromFormalParametersList((ASTformalParameterList) formalParamList);
-            node.parameters.addAll(list);
-            SymbolTable.symbolTable.addFunction(node.functionName, node);
-        } else {
-            throw new RuntimeException("Semantic: Procedure ArgumentList not found ");
-        }
-        return node.childrenAccept(this, data);
-
-    }
-
-    @Override
-    public Object visit(ASTfunctionBody node, Object data) {
-
         return node.childrenAccept(this, data);
     }
 
     @Override
     public Object visit(ASTformalParameterList node, Object data) {
-        // System.out.println("ASTformalParameterList");
         return node.childrenAccept(this, data);
     }
 
@@ -76,12 +47,88 @@ public class SemanticAnalysisVisitor implements MyGrammarVisitor {
         return node.childrenAccept(this, data);
     }
 
+
+    @Override
+    public Object visit(ASTfunctionDeclaration node, Object data) {
+        // has two children (procedureHeading) (procedureBody)
+        final Function function = new Function();
+        // visit the heading
+        node.jjtGetChild(0).jjtAccept(this, data);
+        function.heading = ((ASTfunctionHeading) node.jjtGetChild(0));
+        function.body = ((ASTfunctionBody) node.jjtGetChild(1));
+        SymbolTable.symbolTable.addFunction(function.heading.name, function);
+        return null;
+    }
+
+    @Override
+    public Object visit(ASTfunctionHeading node, Object data) {
+        // has two children (identifier) (formalParameterList)
+        Node formalParamList = node.jjtGetChild(1);
+
+        if (formalParamList instanceof ASTformalParameterList) {
+            List<Parameter> list = SemanticHelper.getParamsFromFormalParametersList((ASTformalParameterList) formalParamList);
+            node.parameters.addAll(list);
+
+        } else {
+            throw new RuntimeException("Semantic: function formalParameterList not found ");
+        }
+        return null;
+    }
+
+    @Override
+    public Object visit(ASTfunctionBody node, Object data) {
+        // this will execute the function
+        return node.childrenAccept(this, data);
+    }
+
+    @Override
+    public Object visit(ASTfunctionCall node, Object data) {
+        // get the function, will throw if function is not declared
+        Function function = SymbolTable.symbolTable.getFunction(node.name);
+        // get procedure heading formal parameter
+        List<Integer> formalParameter = function.heading.getFormalParameterTypes();
+        // check procedure actual param types
+        // children are (identifier) (actualParameters)
+        ASTactualParameterList actualParamList = (ASTactualParameterList) node.jjtGetChild(1);
+        // visit the actualParameters to fill the values in the nodes
+        // before getting the types
+        actualParamList.childrenAccept(this, data);
+        List<Integer> actualParamTypes = SemanticHelper.getTypesFromActualParameters(actualParamList);
+
+        boolean isEqual = actualParamTypes.equals(formalParameter);
+        if (!isEqual) {
+            System.err.println("Error in calling procedure expected parameters " + formalParameter + " got " + actualParamTypes);
+            System.exit(1);
+        }
+        // execute the function
+        SymbolTable.symbolTable.enterScope();
+        // fill the scope
+        List<Object> actualParamValuesList = SemanticHelper.getValuesFromActualParameters(actualParamList);
+        // add the actual parameters
+        for (Parameter fParameter : function.heading.parameters) {
+            for (Object actualParamValues : actualParamValuesList) {
+                Variable variable = new Variable(fParameter.name, fParameter.type, actualParamValues, true);
+                SymbolTable.symbolTable.addVariable(variable.name, variable);
+            }
+        }
+        // add Result variable
+        Variable variable = new Variable("Result", function.heading.returnType, null, false);
+        SymbolTable.symbolTable.addVariable(variable.name, variable);
+        // call the body
+        function.body.jjtAccept(this, null);
+        Variable functionResult = SymbolTable.symbolTable.getVariable("Result");
+        // leave the scope
+        SymbolTable.symbolTable.leaveScope();
+        return functionResult.value;
+
+    }
+
     @Override
     public Object visit(ASTprocedureDeclaration node, Object data) {
         // has two children (procedureHeading) (procedureBody)
         final Procedure procedure = new Procedure();
         // visit the heading
-        node.jjtGetChild(0).jjtAccept(this, procedure);
+        node.jjtGetChild(0).jjtAccept(this, data);
         procedure.heading = ((ASTprocedureHeading) node.jjtGetChild(0));
         procedure.body = ((ASTprocedureBody) node.jjtGetChild(1));
         SymbolTable.symbolTable.addProcedure(procedure.heading.name, procedure);
@@ -98,7 +145,7 @@ public class SemanticAnalysisVisitor implements MyGrammarVisitor {
             node.parameters.addAll(list);
 
         } else {
-            throw new RuntimeException("Semantic: Procedure ArgumentList not found ");
+            throw new RuntimeException("Semantic: Procedure formalParameterList not found ");
         }
         return null;
 
@@ -129,10 +176,9 @@ public class SemanticAnalysisVisitor implements MyGrammarVisitor {
             System.err.println("Error in calling procedure expected parameters " + formalParameter + " got " + actualParamTypes);
             System.exit(1);
         }
-        // execution of the procedure
-
-        // push new scope
+        // execute the function
         SymbolTable.symbolTable.enterScope();
+        // fill the scope
         List<Object> actualParamValuesList = SemanticHelper.getValuesFromActualParameters(actualParamList);
         // add the actual parameters
         for (Parameter fParameter : procedure.heading.parameters) {
@@ -141,14 +187,13 @@ public class SemanticAnalysisVisitor implements MyGrammarVisitor {
                 SymbolTable.symbolTable.addVariable(variable.name, variable);
             }
         }
-        // execute the code
-        procedure.body.jjtAccept(this, data);
+        // call the body
+        procedure.body.jjtAccept(this, null);
         // leave the scope
         SymbolTable.symbolTable.leaveScope();
-
-
         return null;
     }
+
 
     @Override
     public Object visit(ASTblock node, Object data) {
@@ -239,7 +284,7 @@ public class SemanticAnalysisVisitor implements MyGrammarVisitor {
     public Object visit(ASTassignmentStatement node, Object data) {
 
         // 1. Get the variable, will throw if undeclared
-        Variable variable = SymbolTable.symbolTable.getVariableDeclaration(node.variableName);
+        Variable variable = SymbolTable.symbolTable.getVariable(node.variableName);
         // 1.1 get variable type
         // TODO change all type to int
         int varType = variable.type;
@@ -261,10 +306,11 @@ public class SemanticAnalysisVisitor implements MyGrammarVisitor {
             // check the type
             int functionReturnType = functionCallNode.getFunctionReturnType();
             if (varType != functionReturnType) {
-                throw new RuntimeException("Semantic: Incompatible types, variable: " + node.variableName + " type is: " + variable.type + " but was assigned function return type: " + SemanticHelper.getStringFromIntType(functionReturnType));
+                throw new RuntimeException("Semantic: Incompatible types, variable: " + node.variableName + " type is: " + variable.type + " but was function return type is: " + SemanticHelper.getStringFromIntType(functionReturnType));
             }
-            return node.childrenAccept(this, data);
-
+            // call the function & do the assignment
+            variable.value = functionCallNode.jjtAccept(this, data);
+            variable.isInit = true;
         }
 
         return null;
@@ -315,39 +361,6 @@ public class SemanticAnalysisVisitor implements MyGrammarVisitor {
         return null;
     }
 
-
-    @Override
-    public Object visit(ASTfunctionCall node, Object data) {
-
-        // Check if function is declared
-        if (!SymbolTable.symbolTable.doesFunctionExist(node.functionName)) {
-            System.err.println("Semantic: Undeclared function used: " + node.functionName);
-            System.exit(1);
-        }
-        // get the function heading
-        ASTfunctionHeading functionHeading = SymbolTable.symbolTable.getFunctionHeading(node.functionName);
-        // get function heading formal parameter
-        List<Integer> formalParameter = functionHeading.getFormalParameterTypes();
-        // check procedure actual param types
-        Node actualParamList = node.jjtGetChild(1);
-        if (!(actualParamList instanceof ASTactualParameterList)) {
-            System.err.println("Semantic: visit(ASTprocedureCall)");
-            System.exit(1);
-        }
-
-        // visit the actualParameters before getting the types
-        ((ASTactualParameterList) actualParamList).childrenAccept(this, data);
-        List<Integer> actualParamTypes = SemanticHelper.getTypesFromActualParameters((ASTactualParameterList) actualParamList);
-
-        boolean isEqual = actualParamTypes.equals(formalParameter);
-        if (!isEqual) {
-            System.err.println("Error in calling function expected parameters " + formalParameter + " got " + actualParamTypes);
-            System.exit(1);
-        }
-
-        return null;
-
-    }
 
     @Override
     public Object visit(ASTactualParameterList node, Object data) {

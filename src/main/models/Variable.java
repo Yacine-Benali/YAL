@@ -1,5 +1,8 @@
 package main.models;
 
+import main.SemanticAnalysisVisitor;
+import main.SemanticHelper;
+
 public class Variable {
 
     public String name;
@@ -18,7 +21,7 @@ public class Variable {
     public String toString() {
         return "Variable{" +
                 "name='" + name + '\'' +
-                ", type='" + type + '\'' +
+                ", type='" + SemanticHelper.getStringFromIntType(type) + '\'' +
                 ", value=" + value +
                 ", isInit=" + isInit +
                 '}';

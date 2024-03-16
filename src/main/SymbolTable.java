@@ -4,9 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Stack;
 
-import main.jjtree.ASTfunctionHeading;
-import main.jjtree.ASTprocedureHeading;
-import main.jjtree.ASTvariableDeclaration;
+import main.models.Function;
 import main.models.Procedure;
 import main.models.Variable;
 
@@ -23,31 +21,24 @@ public class SymbolTable {
         this.scopeStack.push(new HashMap<>()); // Global scope
     }
 
-    public void addFunction(String name, ASTfunctionHeading functionNode) {
+    public void addFunction(String name, Function function) {
         Map<String, Object> currentScope = scopeStack.peek();
         if (currentScope.containsKey(name)) {
             // TODO show error line and column
             throw new RuntimeException("SymbolTable: Function '" + name + "' already defined in the current scope");
 
         }
-        currentScope.put(name, functionNode);
+        currentScope.put(name, function);
     }
 
-    public boolean doesFunctionExist(String name) {
-        Map<String, Object> currentScope = scopeStack.peek();
-        if (currentScope.containsKey(name)) {
-            return currentScope.get(name) instanceof ASTfunctionHeading;
-        }
-        return false;
-    }
 
-    public ASTfunctionHeading getFunctionHeading(String name) {
+    public Function getFunction(String name) {
         Map<String, Object> currentScope = scopeStack.peek();
         if (currentScope.containsKey(name)) {
-            if (currentScope.get(name) instanceof ASTfunctionHeading)
-                return (ASTfunctionHeading) currentScope.get(name);
+            if (currentScope.get(name) instanceof Function)
+                return (Function) currentScope.get(name);
         }
-        throw new RuntimeException("SymbolTable: function '" + name + "' could not be retrieved");
+        throw new RuntimeException("SymbolTable, Undeclared function called: " + name );
     }
 
     public void addProcedure(String name, Procedure procedure) {
@@ -77,7 +68,7 @@ public class SymbolTable {
         currentScope.put(name, variableNode);
     }
 
-    public Variable getVariableDeclaration(String name) {
+    public Variable getVariable(String name) {
         Map<String, Object> currentScope = scopeStack.peek();
         if (currentScope.containsKey(name)) {
             if (currentScope.get(name) instanceof Variable)

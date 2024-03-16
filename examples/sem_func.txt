@@ -1,21 +1,17 @@
 program numberguess
 
-procedure p(x:int)
+function f(y:int):int
 begin
-    x := 10;
-    while x > 0 do
+    while y > 0 do
         begin
-            print(x);
-            if x == 3 then
-                begin
-                    break;
-                end
-            x := x -1;
+            print(y);
+            y := y -1;
         end
+    Result := 42;
 end
 
 var
     x:int;
 begin
-    p(10);
+    x:=f(10);
 end

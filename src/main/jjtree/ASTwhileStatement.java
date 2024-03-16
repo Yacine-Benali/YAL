@@ -31,7 +31,6 @@ class ASTwhileStatement extends SimpleNode {
      * Accept the visitor.
      **/
     public Object jjtAccept(MyGrammarVisitor visitor, Object data) {
-        System.out.println("ASTwhileStatement");
         // first child is the expression get its boolean value
         boolean expressionValueBool = getExpressionValue(visitor, data);
         while (expressionValueBool) {
