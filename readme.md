@@ -38,7 +38,7 @@ In YAL, a variable must be declared before it can be used in the variables decla
 var     
 number: int;     
 name: string;     
-isAvailable: boolean;     
+isAvailable: bool;     
 price: real;
 ```
 
@@ -50,7 +50,7 @@ Functions in YAL are blocks of code that carry out specific tasks and can return
 
 
 ```
-function AddNumbers(a:integer, b: integer): integer 
+function AddNumbers(a:int, b: int): int
 // optional variables declaration section
 // var
 // x:int;
@@ -67,7 +67,7 @@ Procedures in YAL are blocks of code that are designed to perform a specific tas
 Here's a simple example of a procedure:
 
 ```
-procedure DisplayGreeting(name: String)
+procedure DisplayGreeting(name: string)
 begin     
 	print("hello, " + name); 
 end
@@ -135,35 +135,35 @@ receives a string from the user on fail it returns null
 ## Semantic Analysis
 We detect most semantic errors, either inside nested operations, like ifs and whiles, or outside them.. For displaying these errors we indicate the line, variable and type of error. Errors we detect range from:
 1. **Function-related Errors:**
-    -  [x] Duplicate functions: Declaring functions with the same name.
-    -  [x] Duplicate identifier: Declaring functions with the same name as another identifier such as a function name, variable name or procedure name
-    -  [x] Function type mismatch: Mismatch between declared and actual types in function definitions.
-    -  [x] Function no return: function does not return anything when it should: this will return null
-    -  [x] Function not declared: Calling a function that hasn't been declared.
-    -  [x] Wrong number of arguments for a function: Incorrect number of parameters passed to a function.
-    -  [x] Wrong type of arguments: Mismatch in the type of arguments passed to a function.
-    -  [x] Return type not declared: Missing declaration of the return type for a function.
-    -  [x] Return type mismatch: Mismatch between the declared and actual return types of a function.
-    -  [x] Argument not initialized: giving a function a variable that has not been initialized
+    -  [x] Duplicate functions: Declaring functions with the same name. (`func_duplicate.pas`)
+    -  [x] Duplicate identifier: Declaring functions with the same name as another identifier such as a function name, variable name or procedure name. (`func_dupe_ident.pas`)
+    -  [x] Function type mismatch: Mismatch between declared and actual types in function definitions. (`func_type_mism.pas`)
+    -  [x] Function no return: function does not return anything when it should: this will return null. (`func_not_return.pas`)
+    -  [x] Function not declared: Calling a function that hasn't been declared. (`func_not_declared.pas`)
+    -  [x] Wrong number of arguments for a function: Incorrect number of parameters passed to a function. (`func_wrong_arg_num.pas`)
+    -  [x] Wrong type of arguments: Mismatch in the type of arguments passed to a function. (`func_wrong_arg_type.pas`)
+    -  [x] Return type not declared: Missing declaration of the return type for a function. (`func_ret_type_not_declared.pas`)
+    -  [x] Return type mismatch: Mismatch between the declared and actual return types of a function. (`func_ret_type_mism.pas`)
+    -  [x] Argument not initialized: giving a function a variable that has not been initialized. (`func_arg_not_init.pas`)
 1. . **Procedure-related Errors:**
-    -  [x] Duplicate procedure: Declaring procedure with the same name.
-    -  [x] Duplicate identifier: Declaring functions with the same name as another identifier such as a function name, variable name or procedure name
-    -  [x] procedure type mismatch: Mismatch between declared and actual types in procedure definitions.
-    -  [x] procedure not declared: Calling a procedure that hasn't been declared.
-    -  [x] Wrong number of arguments for a procedure: Incorrect number of parameters passed to a procedure.
-    -  [x] Wrong type of arguments: Mismatch in the type of arguments passed to a procedure.
-    -  [x] Argument not initialized: giving a procedure a variable that has not been initialized
+    -  [x] Duplicate procedure: Declaring procedure with the same name. (`proc_duplicate.pas`)
+    -  [x] Duplicate identifier: Declaring procedure with the same name as another identifier such as a function name, variable name or procedure name. (`proc_dupe_ident.pas`)
+    -  [x] procedure type mismatch: Mismatch between declared and actual types in procedure definitions. (`proc_type_mism.pas`)
+    -  [x] procedure not declared: Calling a procedure that hasn't been declared. (`proc_not_declared.pas`)
+    -  [x] Wrong number of arguments for a procedure: Incorrect number of parameters passed to a procedure. (`proc_wrong_arg_num_1(2).pas`)
+    -  [x] Wrong type of arguments: Mismatch in the type of arguments passed to a procedure. (`proc_wrong_arg_type.pas`)
+    -  [x] Argument not initialized: giving a procedure a variable that has not been initialized. (`proc_arg_not_init.pas`)
 1. **Argument and Parameter Errors:**
-    -  [x] Undefined arguments: Use of arguments that haven't been defined.
+    -  [x] Undefined arguments: Use of arguments that haven't been defined. (`undefined_arg.pas`)
 2. **Variable-related Errors:**
-    -  [x] Type mismatches: Inconsistencies between declared and assigned types of variables.
-    -  [x] Duplicate variables: In the same scope, declaring variables with the same name or with a name of another identifier such as a function or a procedure .
-    -  [x] Undefined variables: Using variables that haven’t been defined.
+    -  [x] Type mismatches: Inconsistencies between declared and assigned types of variables. (`type_mismatch.pas`)
+    -  [x] Duplicate variables: In the same scope, declaring variables with the same name or with a name of another identifier such as a function or a procedure. (`dupe_variable.pas`)
+    -  [x] Undefined variables: Using variables that haven’t been defined. (`undefined_variable.pas`)
 - **Expression-Related Errors:**
-	-  [x] Arithmetic Type Mismatch: Performing arithmetic operations on incompatible types, except for certain cases like int and real (int gets casted to real).
-	-  [x] Comparison Type Mismatch: Comparing values of different types, with exceptions for int and double.
-	-  [x] Invalid Boolean Operations: Using logical boolean operators (like AND, OR) on non-boolean types.
-	-  [x] Division by Zero: Attempting to divide a number by zero, which is undefined.
+	-  [x] Arithmetic Type Mismatch: Performing arithmetic operations on incompatible types, except for certain cases like int and real (int gets casted to real). (`arth_type_mism.pas`)
+	-  [x] Comparison Type Mismatch: Comparing values of different types, with exceptions for int and double. (`comp_type_mism.pas`)
+	-  [x] Invalid Boolean Operations: Using logical boolean operators (like AND, OR) on non-boolean types. (`invalid_bool_ops.pas`)
+	-  [x] Division by Zero: Attempting to divide a number by zero, which is undefined. (`div_by_zero.pas`)
 
 ## Limitations 
 - Can not call a function within an expression 
