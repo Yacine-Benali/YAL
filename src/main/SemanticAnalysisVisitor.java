@@ -345,7 +345,6 @@ public class SemanticAnalysisVisitor implements MyGrammarVisitor {
                         "Function returned null, variable: " + node.variableName +
                                 " type is: " + SemanticHelper.getStringFromIntType(variable.type) +
                                 " but function return was: null ");
-
             }
             variable.value = result;
             variable.isInit = true;
