@@ -1,14 +1,6 @@
-- [[#How to use|How to use]]
-- [[#Basic Introduction to YAL|Basic Introduction to YAL]]
-	- [[#Basic Introduction to YAL#Overall Structure|Overall Structure]]
-	- [[#Basic Introduction to YAL#Variables and Their Types|Variables and Their Types]]
-	- [[#Basic Introduction to YAL#Functions and Function Returns Using `Result` Variable|Functions and Function Returns Using `Result` Variable]]
-	- [[#Basic Introduction to YAL#Procedures|Procedures]]
-		- [[#Procedures#Calling a Procedure|Calling a Procedure]]
-	- [[#Basic Introduction to YAL#If Statement|If Statement]]
-	- [[#Basic Introduction to YAL#While Statement|While Statement]]
-- [[#Semantic Analysis|Semantic Analysis]]
-- [[#Limitations|Limitations]]
+YAL - Yacine's & Anthony Programming Language
+
+YAL is an interpreted programming language created as a part of the Compiler Construction course during CYBERUS Masters module using `javaCC & jjtree`, the aim was to create a simple language that beginners can use to get started. This is why we inspired the syntax from Pascal the first programming language I learned in university  
 
 ## How to use
 1. Clone the repo
