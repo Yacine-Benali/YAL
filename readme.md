@@ -1,9 +1,21 @@
-# How to use
+- [[#How to use|How to use]]
+- [[#Basic Introduction to YAL|Basic Introduction to YAL]]
+	- [[#Basic Introduction to YAL#Overall Structure|Overall Structure]]
+	- [[#Basic Introduction to YAL#Variables and Their Types|Variables and Their Types]]
+	- [[#Basic Introduction to YAL#Functions and Function Returns Using `Result` Variable|Functions and Function Returns Using `Result` Variable]]
+	- [[#Basic Introduction to YAL#Procedures|Procedures]]
+		- [[#Procedures#Calling a Procedure|Calling a Procedure]]
+	- [[#Basic Introduction to YAL#If Statement|If Statement]]
+	- [[#Basic Introduction to YAL#While Statement|While Statement]]
+- [[#Semantic Analysis|Semantic Analysis]]
+- [[#Limitations|Limitations]]
+
+## How to use
 1. Clone the repo
 2. Have ``javacc`` ``jjtree`` and optionally `dot` installed
 3. use the PowerShell script `build.ps1` to build the compiler it will generate ``yalc.jar`` file
 4. run the compiler on your code using `java -jar yalc.jar yourfile.txt`
-# Basic Introduction to YAL
+## Basic Introduction to YAL
 
 This README provides a very basic introduction to YAL programming language, covering some fundamental concepts such as variables, functions, if statements, and while loops.
 ### Overall Structure
@@ -18,7 +30,7 @@ begin
 end
 ```
 
-## Variables and Their Types
+### Variables and Their Types
 
 In YAL, a variable must be declared before it can be used in the variables declaration section. Each variable has a specific type, which determines the size and layout of the variable's memory, as well as the range of values that can be stored within that memory.
 
@@ -32,7 +44,7 @@ price: real;
 
 Here, `number` is an integer variable, `name` is a string, `isAvailable` is a boolean, and `price` is a real (floating-point) variable.
 
-## Functions and Function Returns Using `Result` Variable
+### Functions and Function Returns Using `Result` Variable
 
 Functions in YAL are blocks of code that carry out specific tasks and can return a value. The `Result` variable is used in functions to hold the value that the function will return. functions have there own variables declaration sections
 
@@ -48,7 +60,7 @@ end
 ```
 
 This function, `AddNumbers`, takes two integers `a` and `b`, adds them, and returns the result.
-## Procedures
+### Procedures
 
 Procedures in YAL are blocks of code that are designed to perform a specific task, but unlike functions, they do not return a value. Procedures are useful for executing code that performs actions, such as printing to the screen, calculating results, or modifying variables, without needing to return a result.
 
@@ -63,7 +75,7 @@ end
 
 In this example, the `DisplayGreeting` procedure takes a single parameter, `name`, and prints a personalized greeting message.
 
-### Calling a Procedure
+#### Calling a Procedure
 
 To use a procedure, you simply call it by its name followed by parentheses. If the procedure takes parameters, you provide the values within the parentheses.
 
@@ -72,7 +84,7 @@ begin
 DisplayGreeting('Alice'); 
 end
 ```
-## If Statement
+### If Statement
 
 The `if` statement is used for conditional execution. YAL executes the code inside the `if` statement only if the condition is true.
 
@@ -89,7 +101,7 @@ end
 ```
 
 This will output "You are an adult." because age is greater than or equal to 18.
-## While Statement
+### While Statement
 
 The `while` statement allows you to repeat a block of code as long as a certain condition is true.
 
@@ -107,7 +119,7 @@ end
 ```
 
 This will print the numbers from 1 to 5.
-# Semantic Analysis
+## Semantic Analysis
 We detect most semantic errors, either inside nested operations, like ifs and whiles, or outside them.. For displaying these errors we indicate the line, variable and type of error. Errors we detect range from:
 1. **Function-related Errors:**
     -  [x] Duplicate functions: Declaring functions with the same name.
@@ -118,13 +130,19 @@ We detect most semantic errors, either inside nested operations, like ifs and wh
     -  [x] Wrong type of arguments: Mismatch in the type of arguments passed to a function.
     -  [x] Return type not declared: Missing declaration of the return type for a function.
     -  [x] Return type mismatch: Mismatch between the declared and actual return types of a function.
-2. **Argument and Parameter Errors:**
+2. . **Procedure-related Errors:**
+    -  [x] Duplicate procedure: Declaring procedure with the same name.
+    -  [x] procedure type mismatch: Mismatch between declared and actual types in procedure definitions.
+    -  [x] procedure not declared: Calling a procedure that hasn't been declared.
+    -  [x] Wrong number of arguments for a procedure: Incorrect number of parameters passed to a procedure.
+    -  [x] Wrong type of arguments: Mismatch in the type of arguments passed to a procedure.
+3. **Argument and Parameter Errors:**
     -  [x] Undefined arguments: Use of arguments that haven't been defined.
-3. **Variable-related Errors:**
+4. **Variable-related Errors:**
     -  [x] Type mismatches: Inconsistencies between declared and assigned types of variables.
     -  [x] Duplicate variables: Declaring variables with the same name.
     -  [x] Undefined variables: Using variables that haven’t been defined.
-# Limitations 
+## Limitations 
 - **Variable Types:**
     Supported variable types are: integer (int), real number (real), string (string), and boolean (boolean).
 - **Variable Declaration:**
