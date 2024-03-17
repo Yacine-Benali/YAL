@@ -318,7 +318,7 @@ public class SemanticAnalysisVisitor implements MyGrammarVisitor {
             int expType = SemanticHelper.getType(express);
 
             if (varType != expType) {
-                throw new SemanitcException(node.jjtGetFirstToken(),"Incompatible types, variable: "
+                throw new SemanitcException(node.jjtGetFirstToken(), "Incompatible types, variable: "
                         + node.variableName + " type is: " + SemanticHelper.getStringFromIntType(variable.type) +
                         " but was assigned type: " + SemanticHelper.getStringFromIntType(expType));
             }
@@ -332,15 +332,43 @@ public class SemanticAnalysisVisitor implements MyGrammarVisitor {
             if (varType != functionReturnType) {
                 throw new SemanitcException(node.jjtGetFirstToken(),
                         "Incompatible types, variable: " + node.variableName +
-                        " type is: " +SemanticHelper.getStringFromIntType(variable.type) +
+                                " type is: " + SemanticHelper.getStringFromIntType(variable.type) +
                                 " but function return type is: " +
                                 SemanticHelper.getStringFromIntType(functionReturnType));
             }
             // call the function & do the assignment
             variable.value = functionCallNode.jjtAccept(this, data);
             variable.isInit = true;
+        } else if (node.jjtGetChild(1).jjtGetChild(0) instanceof ASTbuiltInCalls asTbuiltInCalls) {
+            // jjtGetChild(1) for ASTbuiltInCalls
+            // jjtGetChild(0) for either (ReadIntCall) or (ReadStringCall)
+            if (varType != asTbuiltInCalls.getReturnType()) {
+                throw new SemanitcException(node.jjtGetFirstToken(),
+                        "Incompatible types, variable: " + node.variableName +
+                                " type is: " + SemanticHelper.getStringFromIntType(variable.type) +
+                                " but built-in function return type is: " +
+                                SemanticHelper.getStringFromIntType(asTbuiltInCalls.getReturnType()));
+            } else {
+                variable.value = asTbuiltInCalls.jjtAccept(this, data);
+                variable.isInit = true;
+            }
         }
 
+        return null;
+    }
+
+    @Override
+    public Object visit(ASTbuiltInCalls node, Object data) {
+        return null;
+    }
+
+    @Override
+    public Object visit(ASTReadIntCall node, Object data) {
+        return null;
+    }
+
+    @Override
+    public Object visit(ASTReadStringCall node, Object data) {
         return null;
     }
 

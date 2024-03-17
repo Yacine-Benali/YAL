@@ -105,6 +105,8 @@ TOKEN : { /* KEYWORDS */
 |   < RESULT:"Result">
 // add a seprate section for built-in function when you have more then one
 |   < PRINT : "print" >
+|   < READINT : "readInt" >
+|   < READSTRING : "readString" >
 }
 TOKEN : { /* operators*/
     < NOT : "!" >
@@ -139,31 +141,10 @@ TOKEN : { /* others */
 |  < PROGRAMIDENTIFIER :
         (<MINLETTER> | <CAPLETTER>) (<MINLETTER> | <CAPLETTER>| <DIGIT>)*
    >
+|
+    < STRING: "\"" ( ~["\"","\\"] | "\\" ( ["n","t","b","r","f","\\","\"","'"] | ["0"-"7"] ( ["0"-"7"] )? ) )* "\"" >
 
 
-/**
-  Double Quotes: The string starts and ends with a double quote (\").
-
-  Character Matching: Inside the string, you can have any character except a double quote or a backslash (~["\"","\\"]). This is to ensure that the parser does not prematurely end the string or misinterpret a backslash.
-
-  Escape Sequences: If a backslash (\\) is encountered, it's followed by either a single character for standard escape sequences (like n, t, b, r, f, \\, \", \') or by up to three octal digits (["0"-"7"]).
-
-  Repetition (*): The combination of characters and escape sequences can repeat any number of times.
-  * */
-|   < STRING :
-        "\""
-        (
-          ~["\"","\\"] // Match any character except double quote or backslash
-        |
-          "\\"
-          (
-            ["n","t","b","r","f","\\","\"","'"] // Standard escape sequences
-          |
-            ["0"-"7"] ( ["0"-"7"] )? // Octal escape (up to 3 octal digits)
-          )
-        )*
-        "\""
-    >
 
 }
 
@@ -772,8 +753,8 @@ void simpleStatement() :
         parser cant tell the diff between assignment and procedureCall
         because they both start with Identifier
     */
-    break2() |
-    printCall() |
+    break2() <SEMICOLON>|
+    printCall() <SEMICOLON>|
     LOOKAHEAD(2) assignmentStatement() <SEMICOLON> |
     procedureCall() <SEMICOLON>/*@bgen(jjtree)*/
     } catch (Throwable jjte000) {
@@ -807,7 +788,7 @@ void break2():{/*@bgen(jjtree) break2 */
 {/*@bgen(jjtree) break2 */
     try {
 /*@egen*/
-    <BREAK> <SEMICOLON>/*@bgen(jjtree)*/
+    <BREAK>/*@bgen(jjtree)*/
     } finally {
       if (jjtc000) {
         jjtree.closeNodeScope(jjtn000, true);
@@ -826,7 +807,7 @@ void printCall():{/*@bgen(jjtree) printCall */
 {/*@bgen(jjtree) printCall */
     try {
 /*@egen*/
-    <PRINT> <LPAREN> Expression() <RPAREN> <SEMICOLON>/*@bgen(jjtree)*/
+    <PRINT> <LPAREN> Expression() <RPAREN>/*@bgen(jjtree)*/
     } catch (Throwable jjte000) {
       if (jjtc000) {
         jjtree.clearNodeScope(jjtn000);
@@ -859,16 +840,19 @@ void assignmentStatement() : {/*@bgen(jjtree) assignmentStatement */
 {/*@bgen(jjtree) assignmentStatement */
    try {
 /*@egen*/
-   variableName=variableIdentifier() <ASSIGN>(LOOKAHEAD(2)
-   functionCall()  // expressions covers variable id & string & number but no function calls
-   | Expression())/*@bgen(jjtree)*/
+   variableName=variableIdentifier() <ASSIGN>(
+   LOOKAHEAD(3) builtInCalls()
+   |
+   LOOKAHEAD(2) functionCall()
+   |
+   // expressions covers variable id & string & number but no function calls
+   Expression())/*@bgen(jjtree)*/
    {
      jjtree.closeNodeScope(jjtn000, true);
      jjtc000 = false;
      jjtn000.jjtSetLastToken(getToken(0));
    }
 /*@egen*/
-
 
    {jjtn000.variableName = variableName;}/*@bgen(jjtree)*/
    } catch (Throwable jjte000) {
@@ -893,7 +877,75 @@ void assignmentStatement() : {/*@bgen(jjtree) assignmentStatement */
    }
 /*@egen*/
 }
+void builtInCalls(): {/*@bgen(jjtree) builtInCalls */
+  ASTbuiltInCalls jjtn000 = new ASTbuiltInCalls(JJTBUILTINCALLS);
+  boolean jjtc000 = true;
+  jjtree.openNodeScope(jjtn000);
+  jjtn000.jjtSetFirstToken(getToken(1));
+/*@egen*/}
+{/*@bgen(jjtree) builtInCalls */
+    try {
+/*@egen*/
+    ReadIntCall() | ReadStringCall()/*@bgen(jjtree)*/
+    } catch (Throwable jjte000) {
+      if (jjtc000) {
+        jjtree.clearNodeScope(jjtn000);
+        jjtc000 = false;
+      } else {
+        jjtree.popNode();
+      }
+      if (jjte000 instanceof RuntimeException) {
+        throw (RuntimeException)jjte000;
+      }
+      if (jjte000 instanceof ParseException) {
+        throw (ParseException)jjte000;
+      }
+      throw (Error)jjte000;
+    } finally {
+      if (jjtc000) {
+        jjtree.closeNodeScope(jjtn000, true);
+        jjtn000.jjtSetLastToken(getToken(0));
+      }
+    }
+/*@egen*/
+}
+void ReadIntCall():{/*@bgen(jjtree) ReadIntCall */
+  ASTReadIntCall jjtn000 = new ASTReadIntCall(JJTREADINTCALL);
+  boolean jjtc000 = true;
+  jjtree.openNodeScope(jjtn000);
+  jjtn000.jjtSetFirstToken(getToken(1));
+/*@egen*/}
+{/*@bgen(jjtree) ReadIntCall */
+    try {
+/*@egen*/
+    <READINT> <LPAREN> <RPAREN>/*@bgen(jjtree)*/
+    } finally {
+      if (jjtc000) {
+        jjtree.closeNodeScope(jjtn000, true);
+        jjtn000.jjtSetLastToken(getToken(0));
+      }
+    }
+/*@egen*/
+}
 
+void ReadStringCall():{/*@bgen(jjtree) ReadStringCall */
+  ASTReadStringCall jjtn000 = new ASTReadStringCall(JJTREADSTRINGCALL);
+  boolean jjtc000 = true;
+  jjtree.openNodeScope(jjtn000);
+  jjtn000.jjtSetFirstToken(getToken(1));
+/*@egen*/}
+{/*@bgen(jjtree) ReadStringCall */
+    try {
+/*@egen*/
+    <READSTRING> <LPAREN> <RPAREN>/*@bgen(jjtree)*/
+    } finally {
+      if (jjtc000) {
+        jjtree.closeNodeScope(jjtn000, true);
+        jjtn000.jjtSetLastToken(getToken(0));
+      }
+    }
+/*@egen*/
+}
 void procedureCall() :{/*@bgen(jjtree) procedureCall */
                        ASTprocedureCall jjtn000 = new ASTprocedureCall(JJTPROCEDURECALL);
                        boolean jjtc000 = true;
@@ -1427,11 +1479,11 @@ void UnaryExpression() :
  jjtn000.jjtSetFirstToken(getToken(1));
 /*@egen*/Token t = null;}
 {/*@bgen(jjtree) UnaryExpression */
-    try {
+  try {
 /*@egen*/
-    t=<NOT>  UnaryExpression()
+  (  t=<NOT>  UnaryExpression()
   | t=<MINUS> UnaryExpression()
-  | N()/*@bgen(jjtree)*/
+  | N())/*@bgen(jjtree)*/
   {
     jjtree.closeNodeScope(jjtn000, true);
     jjtc000 = false;
@@ -1443,28 +1495,29 @@ void UnaryExpression() :
         jjtn000.isUnary = true;
     else
         jjtn000.operator = t.image;
+        jjtn000.isUnary = true;
 
   }/*@bgen(jjtree)*/
-    } catch (Throwable jjte000) {
-      if (jjtc000) {
-        jjtree.clearNodeScope(jjtn000);
-        jjtc000 = false;
-      } else {
-        jjtree.popNode();
-      }
-      if (jjte000 instanceof RuntimeException) {
-        throw (RuntimeException)jjte000;
-      }
-      if (jjte000 instanceof ParseException) {
-        throw (ParseException)jjte000;
-      }
-      throw (Error)jjte000;
-    } finally {
-      if (jjtc000) {
-        jjtree.closeNodeScope(jjtn000, true);
-        jjtn000.jjtSetLastToken(getToken(0));
-      }
+  } catch (Throwable jjte000) {
+    if (jjtc000) {
+      jjtree.clearNodeScope(jjtn000);
+      jjtc000 = false;
+    } else {
+      jjtree.popNode();
     }
+    if (jjte000 instanceof RuntimeException) {
+      throw (RuntimeException)jjte000;
+    }
+    if (jjte000 instanceof ParseException) {
+      throw (ParseException)jjte000;
+    }
+    throw (Error)jjte000;
+  } finally {
+    if (jjtc000) {
+      jjtree.closeNodeScope(jjtn000, true);
+      jjtn000.jjtSetLastToken(getToken(0));
+    }
+  }
 /*@egen*/
 
 }

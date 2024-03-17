@@ -23,26 +23,29 @@ public interface MyGrammarTreeConstants
   public int JJTBREAK2 = 17;
   public int JJTPRINTCALL = 18;
   public int JJTASSIGNMENTSTATEMENT = 19;
-  public int JJTPROCEDURECALL = 20;
-  public int JJTSTRUCTUREDSTATEMENT = 21;
-  public int JJTWHILESTATEMENT = 22;
-  public int JJTIFSTATEMENT = 23;
-  public int JJTIDENTIFIERLIST = 24;
-  public int JJTTYPEIDENTIFIER = 25;
-  public int JJTIDENTIFIER = 26;
-  public int JJTVARIABLEIDENTIFIER = 27;
-  public int JJTEXPRESSION = 28;
-  public int JJTANDEXPRESSION = 29;
-  public int JJTEQUALITYEXPRESSION = 30;
-  public int JJTRELATIONALEXPRESSION = 31;
-  public int JJTADDITIVEEXPRESSION = 32;
-  public int JJTMULTIPLICATIVEEXPRESSION = 33;
-  public int JJTUNARYEXPRESSION = 34;
-  public int JJTN = 35;
-  public int JJTLITERALEXPRESSION = 36;
-  public int JJTFUNCTIONCALL = 37;
-  public int JJTACTUALPARAMETERLIST = 38;
-  public int JJTACTUALPARAMETER = 39;
+  public int JJTBUILTINCALLS = 20;
+  public int JJTREADINTCALL = 21;
+  public int JJTREADSTRINGCALL = 22;
+  public int JJTPROCEDURECALL = 23;
+  public int JJTSTRUCTUREDSTATEMENT = 24;
+  public int JJTWHILESTATEMENT = 25;
+  public int JJTIFSTATEMENT = 26;
+  public int JJTIDENTIFIERLIST = 27;
+  public int JJTTYPEIDENTIFIER = 28;
+  public int JJTIDENTIFIER = 29;
+  public int JJTVARIABLEIDENTIFIER = 30;
+  public int JJTEXPRESSION = 31;
+  public int JJTANDEXPRESSION = 32;
+  public int JJTEQUALITYEXPRESSION = 33;
+  public int JJTRELATIONALEXPRESSION = 34;
+  public int JJTADDITIVEEXPRESSION = 35;
+  public int JJTMULTIPLICATIVEEXPRESSION = 36;
+  public int JJTUNARYEXPRESSION = 37;
+  public int JJTN = 38;
+  public int JJTLITERALEXPRESSION = 39;
+  public int JJTFUNCTIONCALL = 40;
+  public int JJTACTUALPARAMETERLIST = 41;
+  public int JJTACTUALPARAMETER = 42;
 
 
   public String[] jjtNodeName = {
@@ -66,6 +69,9 @@ public interface MyGrammarTreeConstants
     "break2",
     "printCall",
     "assignmentStatement",
+    "builtInCalls",
+    "ReadIntCall",
+    "ReadStringCall",
     "procedureCall",
     "structuredStatement",
     "whileStatement",
@@ -88,4 +94,4 @@ public interface MyGrammarTreeConstants
     "actualParameter",
   };
 }
-/* JavaCC - OriginalChecksum=6e3df1b02b75d1096b5cc118f16a467f (do not edit this line) */
+/* JavaCC - OriginalChecksum=4cbd1c2a00cfb11df0dcde60c9ff71e2 (do not edit this line) */

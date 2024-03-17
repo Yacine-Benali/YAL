@@ -101,6 +101,8 @@ TOKEN : { /* KEYWORDS */
 |   < RESULT:"Result">
 // add a seprate section for built-in function when you have more then one
 |   < PRINT : "print" >
+|   < READINT : "readInt" >
+|   < READSTRING : "readString" >
 }
 TOKEN : { /* operators*/
     < NOT : "!" >
@@ -135,31 +137,10 @@ TOKEN : { /* others */
 |  < PROGRAMIDENTIFIER :
         (<MINLETTER> | <CAPLETTER>) (<MINLETTER> | <CAPLETTER>| <DIGIT>)*
    >
+|
+    < STRING: "\"" ( ~["\"","\\"] | "\\" ( ["n","t","b","r","f","\\","\"","'"] | ["0"-"7"] ( ["0"-"7"] )? ) )* "\"" >
 
 
-/**
-  Double Quotes: The string starts and ends with a double quote (\").
-
-  Character Matching: Inside the string, you can have any character except a double quote or a backslash (~["\"","\\"]). This is to ensure that the parser does not prematurely end the string or misinterpret a backslash.
-
-  Escape Sequences: If a backslash (\\) is encountered, it's followed by either a single character for standard escape sequences (like n, t, b, r, f, \\, \", \') or by up to three octal digits (["0"-"7"]).
-
-  Repetition (*): The combination of characters and escape sequences can repeat any number of times.
-  * */
-|   < STRING :
-        "\""
-        (
-          ~["\"","\\"] // Match any character except double quote or backslash
-        |
-          "\\"
-          (
-            ["n","t","b","r","f","\\","\"","'"] // Standard escape sequences
-          |
-            ["0"-"7"] ( ["0"-"7"] )? // Octal escape (up to 3 octal digits)
-          )
-        )*
-        "\""
-    >
 
 }
 
@@ -283,31 +264,46 @@ void simpleStatement() :
         parser cant tell the diff between assignment and procedureCall
         because they both start with Identifier
     */
-    break2() |
-    printCall() |
+    break2() <SEMICOLON>|
+    printCall() <SEMICOLON>|
     LOOKAHEAD(2) assignmentStatement() <SEMICOLON> |
     procedureCall() <SEMICOLON>
 }
 void break2():{}
 {
-    <BREAK> <SEMICOLON>
+    <BREAK>
 }
 
 void printCall():{}
 {
-    <PRINT> <LPAREN> Expression() <RPAREN> <SEMICOLON>
+    <PRINT> <LPAREN> Expression() <RPAREN>
 }
 
 void assignmentStatement() : {String variableName; }
 {
-   variableName=variableIdentifier() <ASSIGN>(LOOKAHEAD(2)
-   functionCall()  // expressions covers variable id & string & number but no function calls
-   | Expression())
-
+   variableName=variableIdentifier() <ASSIGN>(
+   LOOKAHEAD(3) builtInCalls()
+   |
+   LOOKAHEAD(2) functionCall()
+   |
+   // expressions covers variable id & string & number but no function calls
+   Expression())
 
    {jjtThis.variableName = variableName;}
 }
+void builtInCalls(): {}
+{
+    ReadIntCall() | ReadStringCall()
+}
+void ReadIntCall():{}
+{
+    <READINT> <LPAREN> <RPAREN>
+}
 
+void ReadStringCall():{}
+{
+    <READSTRING> <LPAREN> <RPAREN>
+}
 void procedureCall() :{Token id;}
 {
     id=identifier() actualParameterList()
@@ -424,14 +420,15 @@ void MultiplicativeExpression() :
 void UnaryExpression() :
 {Token t = null;}
 {
-    t=<NOT>  UnaryExpression()
+  (  t=<NOT>  UnaryExpression()
   | t=<MINUS> UnaryExpression()
-  | N()
+  | N())
   {
     if (t == null)
         jjtThis.isUnary = true;
     else
         jjtThis.operator = t.image;
+        jjtThis.isUnary = true;
 
   }
 

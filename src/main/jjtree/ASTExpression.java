@@ -45,6 +45,17 @@ class ASTExpression extends SimpleNode {
         if (operator.equals("!")) {
             res = SemanticHelper.getSolve(res);
             res = !((Boolean) res);
+        } else if (operator.equals("-")) {
+            int resType = SemanticHelper.getType(res);
+            if (resType == 0) {
+                res = -(int) res;
+            } else if (resType == 1) {
+                res = -(double) res;
+            } else {
+                String error = String.format("Unsupported operation %s on type '%s'",
+                        operator, SemanticHelper.getStringFromIntType(resType));
+                throw new TypeError(this.firstToken, error);
+            }
         }
         return res;
     }
@@ -55,7 +66,7 @@ class ASTExpression extends SimpleNode {
         String type2String = SemanticHelper.getStringFromIntType(type2);
         String error = String.format("Unsupported operation %s between types '%s' and '%s'",
                 operator, type1String, type2String);
-        throw new TypeError(this.firstToken,error);
+        throw new TypeError(this.firstToken, error);
     }
 
     public Object execute(MyGrammarVisitor visitor, Object data) {
@@ -93,7 +104,7 @@ class ASTExpression extends SimpleNode {
                 if (type1 == 2) {
                     if (type2 == 0) res = (String) d1 + String.valueOf((Integer) d2);
                     if (type2 == 1) res = (String) d1 + String.valueOf((Double) d2);
-                    if (type2 == 2) res = String.format(" %s %s",d1,d2);
+                    if (type2 == 2) res = String.format(" %s %s", d1, d2);
                     if (type2 == 3) res = (String) d1 + String.valueOf((Boolean) d2);
                 }
                 if (type1 == 3) {
@@ -282,41 +293,41 @@ class ASTExpression extends SimpleNode {
                 if (type1 == 0) {
                     if (type2 == 0) res = (Integer) d1 != (Integer) d2;
                     if (type2 == 1) res = !((Integer) d1).equals((Double) d2);
-                    if (type2 == 2) throwTypeError(type1,type2);
-                    if (type2 == 3) throwTypeError(type1,type2);
+                    if (type2 == 2) throwTypeError(type1, type2);
+                    if (type2 == 3) throwTypeError(type1, type2);
                 }
                 if (type1 == 1) {
                     if (type2 == 0) res = !((Double) d1).equals((Integer) d2);
                     if (type2 == 1) res = (Double) d1 != (Double) d2;
-                    if (type2 == 2) throwTypeError(type1,type2);
-                    if (type2 == 3) throwTypeError(type1,type2);
+                    if (type2 == 2) throwTypeError(type1, type2);
+                    if (type2 == 3) throwTypeError(type1, type2);
                 }
                 if (type1 == 2) {
-                    if (type2 == 0) throwTypeError(type1,type2);
-                    if (type2 == 1) throwTypeError(type1,type2);
+                    if (type2 == 0) throwTypeError(type1, type2);
+                    if (type2 == 1) throwTypeError(type1, type2);
                     if (type2 == 2) res = !Objects.equals((String) d1, (String) d2);
-                    if (type2 == 3) throwTypeError(type1,type2);
+                    if (type2 == 3) throwTypeError(type1, type2);
                 }
                 if (type1 == 3) {
-                    if (type2 == 0) throwTypeError(type1,type2);
-                    if (type2 == 1) throwTypeError(type1,type2);
-                    if (type2 == 2) throwTypeError(type1,type2);
+                    if (type2 == 0) throwTypeError(type1, type2);
+                    if (type2 == 1) throwTypeError(type1, type2);
+                    if (type2 == 2) throwTypeError(type1, type2);
                     if (type2 == 3) res = ((Boolean) d1 == true ? 1 : 0) != ((Boolean) d2 == true ? 1 : 0);
                 }
                 return res;
 
             case "&&":
                 res = null;
-                if(type1 != 3 || type2 != 3 )
-                    throwTypeError(type1,type2);
+                if (type1 != 3 || type2 != 3)
+                    throwTypeError(type1, type2);
                 boolean bo1 = SemanticHelper.getSolve(d1);
                 boolean bo2 = SemanticHelper.getSolve(d2);
                 res = bo1 && bo2;
                 return res;
             case "||":
                 res = null;
-                if(type1 != 3 || type2 != 3 )
-                    throwTypeError(type1,type2);
+                if (type1 != 3 || type2 != 3)
+                    throwTypeError(type1, type2);
                 bo1 = SemanticHelper.getSolve(d1);
                 bo2 = SemanticHelper.getSolve(d2);
                 res = bo1 || bo2;

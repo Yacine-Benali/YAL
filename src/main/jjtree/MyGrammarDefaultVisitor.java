@@ -69,6 +69,15 @@ public class MyGrammarDefaultVisitor implements MyGrammarVisitor{
   public Object visit(ASTassignmentStatement node, Object data){
     return defaultVisit(node, data);
   }
+  public Object visit(ASTbuiltInCalls node, Object data){
+    return defaultVisit(node, data);
+  }
+  public Object visit(ASTReadIntCall node, Object data){
+    return defaultVisit(node, data);
+  }
+  public Object visit(ASTReadStringCall node, Object data){
+    return defaultVisit(node, data);
+  }
   public Object visit(ASTprocedureCall node, Object data){
     return defaultVisit(node, data);
   }
@@ -130,4 +139,4 @@ public class MyGrammarDefaultVisitor implements MyGrammarVisitor{
     return defaultVisit(node, data);
   }
 }
-/* JavaCC - OriginalChecksum=93f968d9a11a123194d8432a5d2b2f8f (do not edit this line) */
+/* JavaCC - OriginalChecksum=cfd1dd01edb7329cfa254499114365bd (do not edit this line) */

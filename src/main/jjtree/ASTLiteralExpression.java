@@ -8,7 +8,7 @@ class ASTLiteralExpression extends ASTExpression {
 
     public void setValue(Object value) {
         String str = (String) value;
-        if (str.equalsIgnoreCase("true") || str.equalsIgnoreCase("false")) {
+        if (str.equals("true") || str.equals("false")) {
             this.value = Boolean.parseBoolean(str);
             return;
         }
@@ -30,6 +30,7 @@ class ASTLiteralExpression extends ASTExpression {
         }
         // it's a string remove the queotes
         this.value = str.substring(1, str.length() - 1);
+        return;
 
     }
 

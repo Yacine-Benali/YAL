@@ -15,7 +15,8 @@ class ASTprintCall extends SimpleNode {
 
   /** Accept the visitor. **/
   public Object jjtAccept(MyGrammarVisitor visitor, Object data) {
-    System.out.println(jjtGetChild(0).jjtAccept(visitor,data));
+    Object result = jjtGetChild(0).jjtAccept(visitor,data);
+    System.out.println(result.toString());
     return visitor.visit(this, data);
   }
 }

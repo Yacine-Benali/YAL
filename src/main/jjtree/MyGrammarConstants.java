@@ -67,49 +67,53 @@ public interface MyGrammarConstants {
   /** RegularExpression Id. */
   int PRINT = 34;
   /** RegularExpression Id. */
-  int NOT = 35;
+  int READINT = 35;
   /** RegularExpression Id. */
-  int OR = 36;
+  int READSTRING = 36;
   /** RegularExpression Id. */
-  int AND = 37;
+  int NOT = 37;
   /** RegularExpression Id. */
-  int PLUS = 38;
+  int OR = 38;
   /** RegularExpression Id. */
-  int MINUS = 39;
+  int AND = 39;
   /** RegularExpression Id. */
-  int MULTIPLY = 40;
+  int PLUS = 40;
   /** RegularExpression Id. */
-  int DIVIDE = 41;
+  int MINUS = 41;
   /** RegularExpression Id. */
-  int LESS = 42;
+  int MULTIPLY = 42;
   /** RegularExpression Id. */
-  int GREATER = 43;
+  int DIVIDE = 43;
   /** RegularExpression Id. */
-  int LESSEQUAL = 44;
+  int LESS = 44;
   /** RegularExpression Id. */
-  int GREATEREQUAL = 45;
+  int GREATER = 45;
   /** RegularExpression Id. */
-  int EQUAL = 46;
+  int LESSEQUAL = 46;
   /** RegularExpression Id. */
-  int NOTEQUAL = 47;
+  int GREATEREQUAL = 47;
   /** RegularExpression Id. */
-  int ASSIGN = 48;
+  int EQUAL = 48;
   /** RegularExpression Id. */
-  int LPAREN = 49;
+  int NOTEQUAL = 49;
   /** RegularExpression Id. */
-  int RPAREN = 50;
+  int ASSIGN = 50;
   /** RegularExpression Id. */
-  int COMMA = 51;
+  int LPAREN = 51;
   /** RegularExpression Id. */
-  int COLON = 52;
+  int RPAREN = 52;
   /** RegularExpression Id. */
-  int SEMICOLON = 53;
+  int COMMA = 53;
   /** RegularExpression Id. */
-  int IDENTIFIER = 54;
+  int COLON = 54;
   /** RegularExpression Id. */
-  int PROGRAMIDENTIFIER = 55;
+  int SEMICOLON = 55;
   /** RegularExpression Id. */
-  int STRING = 56;
+  int IDENTIFIER = 56;
+  /** RegularExpression Id. */
+  int PROGRAMIDENTIFIER = 57;
+  /** RegularExpression Id. */
+  int STRING = 58;
 
   /** Lexical state. */
   int DEFAULT = 0;
@@ -151,6 +155,8 @@ public interface MyGrammarConstants {
     "\"else\"",
     "\"Result\"",
     "\"print\"",
+    "\"readInt\"",
+    "\"readString\"",
     "\"!\"",
     "\"||\"",
     "\"&&\"",
