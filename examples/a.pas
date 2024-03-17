@@ -1,10 +1,10 @@
 program funcNotRet
 
-function showResult(w:int, y:int): int
+function showResult(x:int, y:int): int
 var
     z:int;
 begin
-    z := w + y;
+    z := x + y;
 end
 
 var

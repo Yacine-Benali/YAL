@@ -112,20 +112,22 @@ public class SemanticAnalysisVisitor implements MyGrammarVisitor {
 
 
         }
-        // execute the function
+        // execute the function, enter new scope
         SymbolTable.symbolTable.enterScope();
         // fill the scope
         List<Object> actualParamValuesList = SemanticHelper.getValuesFromActualParameters(actualParamList);
         // add the actual parameters
-        for (Parameter fParameter : function.heading.parameters) {
-            for (Object actualParamValues : actualParamValuesList) {
-                Variable variable = new Variable(fParameter.name, fParameter.type, actualParamValues, true);
-                SymbolTable.symbolTable.addVariable(variable.name, variable);
-            }
+
+        for (int i = 0; i < function.heading.parameters.size(); i++) {
+            Object actualParamValues = actualParamValuesList.get(i);
+            Parameter fParameter = function.heading.parameters.get(i);
+            Variable variable = new Variable(fParameter.name, fParameter.type, actualParamValues, true);
+            SymbolTable.symbolTable.addVariable(variable.name, variable);
         }
         // add Result variable
         Variable variable = new Variable("Result", function.heading.returnType, null, false);
         SymbolTable.symbolTable.addVariable(variable.name, variable);
+
         // call the body
         function.body.jjtAccept(this, null);
         Variable functionResult = SymbolTable.symbolTable.getVariable("Result");
@@ -337,7 +339,15 @@ public class SemanticAnalysisVisitor implements MyGrammarVisitor {
                                 SemanticHelper.getStringFromIntType(functionReturnType));
             }
             // call the function & do the assignment
-            variable.value = functionCallNode.jjtAccept(this, data);
+            Object result = functionCallNode.jjtAccept(this, data);
+            if (result == null) {
+                throw new SemanitcException(node.jjtGetFirstToken(),
+                        "Function returned null, variable: " + node.variableName +
+                                " type is: " + SemanticHelper.getStringFromIntType(variable.type) +
+                                " but function return was: null ");
+
+            }
+            variable.value = result;
             variable.isInit = true;
         } else if (node.jjtGetChild(1).jjtGetChild(0) instanceof ASTbuiltInCalls asTbuiltInCalls) {
             // jjtGetChild(1) for ASTbuiltInCalls
