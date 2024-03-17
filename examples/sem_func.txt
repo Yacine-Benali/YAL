@@ -14,5 +14,5 @@ var
     x:int;
 begin
 
-    print( true || "false");
+    print("hello world");
 end

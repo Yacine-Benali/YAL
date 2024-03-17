@@ -4,60 +4,61 @@ package main.jjtree;
 
 public
 class ASTLiteralExpression extends ASTExpression {
-  private Object value;
+    private Object value;
 
-  public void setValue(Object value)
-  {
-    String str = (String) value;
-    if (str.equalsIgnoreCase("true") || str.equalsIgnoreCase("false")) {
-       this.value = Boolean.parseBoolean(str);
-       return;
+    public void setValue(Object value) {
+        String str = (String) value;
+        if (str.equalsIgnoreCase("true") || str.equalsIgnoreCase("false")) {
+            this.value = Boolean.parseBoolean(str);
+            return;
+        }
+
+        // Try to parse it as an integer
+        try {
+            this.value = Integer.parseInt(str);
+            return;
+        } catch (NumberFormatException e) {
+            // Not an integer
+        }
+
+        // Try to parse it as a double
+        try {
+            this.value = Double.parseDouble(str);
+            return;
+        } catch (NumberFormatException e) {
+            // Not a double
+        }
+        // it's a string remove the queotes
+        this.value = str.substring(1, str.length() - 1);
+
     }
 
-    // Try to parse it as an integer
-    try {
-      this.value= Integer.parseInt(str);
-      return;
-    } catch (NumberFormatException e) {
-      // Not an integer
+    public Object getValue() {
+        return value;
     }
 
-    // Try to parse it as a double
-    try {
-      this.value= Double.parseDouble(str);
-      return;
-    } catch (NumberFormatException e) {
-      // Not a double
+
+    public ASTLiteralExpression(int id) {
+        super(id);
     }
 
-    this.value = str;
-
-  }
-
-  public Object getValue() {
-    return value;
-  }
+    public ASTLiteralExpression(MyGrammar p, int id) {
+        super(p, id);
+    }
 
 
-  public ASTLiteralExpression(int id) {
-    super(id);
-  }
+    /**
+     * Accept the visitor.
+     **/
+    public Object jjtAccept(MyGrammarVisitor visitor, Object data) {
+        return value;
+    }
 
-  public ASTLiteralExpression(MyGrammar p, int id) {
-    super(p, id);
-  }
-
-
-  /** Accept the visitor. **/
-  public Object jjtAccept(MyGrammarVisitor visitor, Object data) {
-    return value;
-  }
-
-  @Override
-  public String toString() {
-    return "ASTLiteralExpression{" +
-            "value=" + value +
-            '}';
-  }
+    @Override
+    public String toString() {
+        return "ASTLiteralExpression{" +
+                "value=" + value +
+                '}';
+    }
 }
 /* JavaCC - OriginalChecksum=14f34e60fb78514d47757c5e29ca7d72 (do not edit this line) */

@@ -21,11 +21,11 @@ public class MyGrammar/*@bgen(jjtree)*/implements MyGrammarTreeConstants, MyGram
             FileReader fileReader = new FileReader(filename);
             MyGrammar parser = new MyGrammar(fileReader);
             parser.enable_tracing();
-
             SimpleNode rootNode = parser.Start();
-             DotGenerator generator = new DotGenerator();
-             generator.generateDot(rootNode);
-             generator.getDotGraph();
+
+            DotGenerator generator = new DotGenerator(filename);
+            generator.generateDot(rootNode);
+            generator.getDotGraph();
 
             SemanticAnalysisVisitor visitor = new SemanticAnalysisVisitor();
             rootNode.jjtAccept(visitor, null); // Starts the visiting process*/

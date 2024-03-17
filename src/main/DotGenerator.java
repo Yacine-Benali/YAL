@@ -2,11 +2,24 @@ package main;
 
 import main.jjtree.*;
 
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
 public class DotGenerator {
     private final StringBuilder dotGraph = new StringBuilder("digraph ASTGraph {\n");
+    private File outputFile;
+
+    public DotGenerator(String inputFilePath)
+    {
+        File inputFile = new File(inputFilePath);
+        File parentDir = inputFile.getParentFile();
+
+        // New file name (example: newfile.txt)
+        String newFileName = "graph.dot";
+        File newFile = new File(parentDir, newFileName);
+        this.outputFile = newFile;
+    }
 
     public void generateDot(SimpleNode root) {
         visit(root, null);
@@ -33,11 +46,10 @@ public class DotGenerator {
             visit((SimpleNode) node.jjtGetChild(i), node);
         }
     }
-
     public void getDotGraph() {
         String content = dotGraph.toString();
 
-        try (FileWriter fileWriter = new FileWriter("graph.dot")) {
+        try (FileWriter fileWriter = new FileWriter(outputFile.getPath())) {
             fileWriter.write(content);
 
         } catch (IOException e) {
