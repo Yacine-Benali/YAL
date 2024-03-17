@@ -1,3 +1,15 @@
+- [[#How to use|How to use]]
+- [[#Basic Introduction to YAL|Basic Introduction to YAL]]
+	- [[#Basic Introduction to YAL#Overall Structure|Overall Structure]]
+	- [[#Basic Introduction to YAL#Variables and Their Types|Variables and Their Types]]
+	- [[#Basic Introduction to YAL#Functions and Function Returns Using `Result` Variable|Functions and Function Returns Using `Result` Variable]]
+	- [[#Basic Introduction to YAL#Procedures|Procedures]]
+		- [[#Procedures#Calling a Procedure|Calling a Procedure]]
+	- [[#Basic Introduction to YAL#If Statement|If Statement]]
+	- [[#Basic Introduction to YAL#While Statement|While Statement]]
+- [[#Semantic Analysis|Semantic Analysis]]
+- [[#Limitations|Limitations]]
+
 ## How to use
 1. Clone the repo
 2. Have ``javacc`` ``jjtree`` and optionally `dot` installed
@@ -38,7 +50,7 @@ Functions in YAL are blocks of code that carry out specific tasks and can return
 
 
 ```
-function AddNumbers(a:int, b: int): int 
+function AddNumbers(a:integer, b: integer): integer 
 // optional variables declaration section
 // var
 // x:int;
@@ -83,7 +95,11 @@ begin
 	age := 20;     
 	if age >= 18 then     
 	begin         
-		writeln('You are an adult.');     
+		print('You are an adult.');     
+	end
+	else
+	begin
+		// something else 
 	end
 end
 ```
@@ -100,39 +116,60 @@ begin
 	count := 1;     
 	while count <= 5 do     
 	begin         
-		writeln('Count: ', count);
+		print('Count: ', count);
 		count := count + 1;
 	end
 end
 ```
 
 This will print the numbers from 1 to 5.
+### Arithmetic and boolean expression*
+## Built-in functions
+### print
+same as ``System.out.prinln`` in java
+## readInt
+this function will keep asking the user to input an int until an int is received 
+## readString
+receives a string from the user on fail it returns null
+
 ## Semantic Analysis
 We detect most semantic errors, either inside nested operations, like ifs and whiles, or outside them.. For displaying these errors we indicate the line, variable and type of error. Errors we detect range from:
 1. **Function-related Errors:**
     -  [x] Duplicate functions: Declaring functions with the same name.
+    -  [x] Duplicate identifier: Declaring functions with the same name as another identifier such as a function name, variable name or procedure name
     -  [x] Function type mismatch: Mismatch between declared and actual types in function definitions.
-    -  [ ] Function does not return when it should: this will return null
+    -  [x] Function no return: function does not return anything when it should: this will return null
     -  [x] Function not declared: Calling a function that hasn't been declared.
     -  [x] Wrong number of arguments for a function: Incorrect number of parameters passed to a function.
     -  [x] Wrong type of arguments: Mismatch in the type of arguments passed to a function.
     -  [x] Return type not declared: Missing declaration of the return type for a function.
     -  [x] Return type mismatch: Mismatch between the declared and actual return types of a function.
-2. . **Procedure-related Errors:**
+    -  [x] Argument not initialized: giving a function a variable that has not been initialized
+1. . **Procedure-related Errors:**
     -  [x] Duplicate procedure: Declaring procedure with the same name.
+    -  [x] Duplicate identifier: Declaring functions with the same name as another identifier such as a function name, variable name or procedure name
     -  [x] procedure type mismatch: Mismatch between declared and actual types in procedure definitions.
     -  [x] procedure not declared: Calling a procedure that hasn't been declared.
     -  [x] Wrong number of arguments for a procedure: Incorrect number of parameters passed to a procedure.
     -  [x] Wrong type of arguments: Mismatch in the type of arguments passed to a procedure.
-3. **Argument and Parameter Errors:**
+    -  [x] Argument not initialized: giving a procedure a variable that has not been initialized
+1. **Argument and Parameter Errors:**
     -  [x] Undefined arguments: Use of arguments that haven't been defined.
-4. **Variable-related Errors:**
+2. **Variable-related Errors:**
     -  [x] Type mismatches: Inconsistencies between declared and assigned types of variables.
-    -  [x] Duplicate variables: Declaring variables with the same name.
+    -  [x] Duplicate variables: In the same scope, declaring variables with the same name or with a name of another identifier such as a function or a procedure .
     -  [x] Undefined variables: Using variables that haven’t been defined.
+- **Expression-Related Errors:**
+	-  [x] Arithmetic Type Mismatch: Performing arithmetic operations on incompatible types, except for certain cases like int and real (int gets casted to real).
+	-  [x] Comparison Type Mismatch: Comparing values of different types, with exceptions for int and double.
+	-  [x] Invalid Boolean Operations: Using logical boolean operators (like AND, OR) on non-boolean types.
+	-  [x] Division by Zero: Attempting to divide a number by zero, which is undefined.
+
 ## Limitations 
+- Can not call a function within an expression 
 - **Variable Types:**
     Supported variable types are: integer (int), real number (real), string (string), and boolean (boolean).
+    no null type, null is not recognized.
 - **Variable Declaration:**
     Declaration of multiple variables in a single line using comma separation is not allowed. 
     This simplification helps in the implementation of the Abstract Syntax Tree (AST) for variable declarations.
