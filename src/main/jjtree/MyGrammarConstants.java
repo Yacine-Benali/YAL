@@ -107,7 +107,9 @@ public interface MyGrammarConstants {
   /** RegularExpression Id. */
   int IDENTIFIER = 54;
   /** RegularExpression Id. */
-  int STRING = 55;
+  int PROGRAMIDENTIFIER = 55;
+  /** RegularExpression Id. */
+  int STRING = 56;
 
   /** Lexical state. */
   int DEFAULT = 0;
@@ -169,6 +171,7 @@ public interface MyGrammarConstants {
     "\":\"",
     "\";\"",
     "<IDENTIFIER>",
+    "<PROGRAMIDENTIFIER>",
     "<STRING>",
   };
 

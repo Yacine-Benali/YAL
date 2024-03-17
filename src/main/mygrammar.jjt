@@ -130,7 +130,12 @@ TOKEN : { /* others */
 // identifier is last else it will also match the above strings
    < IDENTIFIER :
         <MINLETTER> (<MINLETTER> | <CAPLETTER>| <DIGIT>)*
-    >
+   >
+
+|  < PROGRAMIDENTIFIER :
+        (<MINLETTER> | <CAPLETTER>) (<MINLETTER> | <CAPLETTER>| <DIGIT>)*
+   >
+
 
 /**
   Double Quotes: The string starts and ends with a double quote (\").
@@ -170,7 +175,7 @@ SimpleNode Start() #Start :
 void programHeading() :
 {}
 {
-    <PROGRAM> identifier()
+    <PROGRAM> (identifier() |<PROGRAMIDENTIFIER>)
 }
 
 // Function-related rules

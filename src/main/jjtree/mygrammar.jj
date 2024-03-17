@@ -134,7 +134,12 @@ TOKEN : { /* others */
 // identifier is last else it will also match the above strings
    < IDENTIFIER :
         <MINLETTER> (<MINLETTER> | <CAPLETTER>| <DIGIT>)*
-    >
+   >
+
+|  < PROGRAMIDENTIFIER :
+        (<MINLETTER> | <CAPLETTER>) (<MINLETTER> | <CAPLETTER>| <DIGIT>)*
+   >
+
 
 /**
   Double Quotes: The string starts and ends with a double quote (\").
@@ -215,7 +220,7 @@ void programHeading() :
 {/*@bgen(jjtree) programHeading */
     try {
 /*@egen*/
-    <PROGRAM> identifier()/*@bgen(jjtree)*/
+    <PROGRAM> (identifier() |<PROGRAMIDENTIFIER>)/*@bgen(jjtree)*/
     } catch (Throwable jjte000) {
       if (jjtc000) {
         jjtree.clearNodeScope(jjtn000);
