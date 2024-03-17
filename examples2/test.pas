@@ -10,8 +10,6 @@ begin
     print("hello" + name);
 end
 
-
-
 var
 x:int;
 begin

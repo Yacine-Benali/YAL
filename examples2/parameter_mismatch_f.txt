@@ -6,7 +6,6 @@ program test
 
 var res:string;
 begin
-    res := "yacine";
-    res:= hello(res,true,3*2);
+    res:= hello(res);
     print(res);
 end
