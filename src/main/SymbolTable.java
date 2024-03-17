@@ -34,12 +34,14 @@ public class SymbolTable {
 
 
     public Function getFunction(String name) {
-        Map<String, Object> currentScope = scopeStack.peek();
-        if (currentScope.containsKey(name)) {
-            if (currentScope.get(name) instanceof Function)
-                return (Function) currentScope.get(name);
+        // search all scopes
+        for (Map<String, Object> currentScope : scopeStack) {
+            if (currentScope.containsKey(name)) {
+                if (currentScope.get(name) instanceof Function)
+                    return (Function) currentScope.get(name);
+            }
         }
-        throw new RuntimeError("SymbolTable, Undeclared function called: " + name );
+        throw new RuntimeError("SymbolTable, Undeclared function called: " + name);
     }
 
     public void addProcedure(String name, Procedure procedure) {
@@ -52,10 +54,11 @@ public class SymbolTable {
     }
 
     public Procedure getProcedure(String name) {
-        Map<String, Object> currentScope = scopeStack.peek();
-        if (currentScope.containsKey(name)) {
-            if (currentScope.get(name) instanceof Procedure)
-                return (Procedure) currentScope.get(name);
+        for (Map<String, Object> currentScope : scopeStack) {
+            if (currentScope.containsKey(name)) {
+                if (currentScope.get(name) instanceof Procedure)
+                    return (Procedure) currentScope.get(name);
+            }
         }
         throw new RuntimeError("SymbolTable, Undeclared procedure called: " + name);
 

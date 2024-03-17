@@ -9,15 +9,18 @@ begin
     begin
         print("Please geuss an integer number");
         geuss := readInt();
+
         if(geuss == number) then
         begin
             print("You win");
             break;
         end
+
         if(geuss > number) then
         begin
             print("Lower");
         end
+        
         if(geuss < number) then
         begin
             print("Higher");

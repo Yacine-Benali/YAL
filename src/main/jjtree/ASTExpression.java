@@ -285,19 +285,19 @@ class ASTExpression extends SimpleNode {
                     if (type2 == 0) throwTypeError(type1, type2);
                     if (type2 == 1) throwTypeError(type1, type2);
                     if (type2 == 2) throwTypeError(type1, type2);
-                    if (type2 == 3) res = ((Boolean) d1 == true ? 1 : 0) == ((Boolean) d2 == true ? 1 : 0);
+                    if (type2 == 3) res = (Boolean) d1  == (Boolean) d2;
                 }
                 return res;
             case "!=":
                 res = null;
                 if (type1 == 0) {
                     if (type2 == 0) res = (Integer) d1 != (Integer) d2;
-                    if (type2 == 1) res = !((Integer) d1).equals((Double) d2);
+                    if (type2 == 1) throwTypeError(type1, type2);
                     if (type2 == 2) throwTypeError(type1, type2);
                     if (type2 == 3) throwTypeError(type1, type2);
                 }
                 if (type1 == 1) {
-                    if (type2 == 0) res = !((Double) d1).equals((Integer) d2);
+                    if (type2 == 0) throwTypeError(type1, type2);
                     if (type2 == 1) res = (Double) d1 != (Double) d2;
                     if (type2 == 2) throwTypeError(type1, type2);
                     if (type2 == 3) throwTypeError(type1, type2);
@@ -312,7 +312,7 @@ class ASTExpression extends SimpleNode {
                     if (type2 == 0) throwTypeError(type1, type2);
                     if (type2 == 1) throwTypeError(type1, type2);
                     if (type2 == 2) throwTypeError(type1, type2);
-                    if (type2 == 3) res = ((Boolean) d1 == true ? 1 : 0) != ((Boolean) d2 == true ? 1 : 0);
+                    if (type2 == 3) res = (Boolean) d1  != (Boolean) d2;
                 }
                 return res;
 

@@ -38,7 +38,7 @@ Functions in YAL are blocks of code that carry out specific tasks and can return
 
 
 ```
-function AddNumbers(a:integer, b: integer): integer 
+function AddNumbers(a:int, b: int): int 
 // optional variables declaration section
 // var
 // x:int;

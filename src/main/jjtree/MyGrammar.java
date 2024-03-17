@@ -41,7 +41,7 @@ public class MyGrammar/*@bgen(jjtree)*/implements MyGrammarTreeConstants, MyGram
             System.out.println(RED+"Syntax Error: \n" + e.getMessage()+RESET);
         } catch ( Throwable t) {
             System.err.println(RED+t.getMessage()+RESET);
-            t.printStackTrace();
+            //t.printStackTrace();
         }
     }
 

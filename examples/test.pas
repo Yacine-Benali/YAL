@@ -1,14 +1,14 @@
 program Test
-var
-x:bool;
-a:real;
-begin
-    x:=true;
-    x:= !x;
-    x:=-x;
-    print(x);
-    a:= -3.5;
-    print(a);
 
+var
+a:int;
+b:int;
+c:real;
+d:real;
+begin
+a:= 5;
+c:= 5.0;
+d := a+c;
+print(true + 4);
 
 end

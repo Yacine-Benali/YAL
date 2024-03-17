@@ -34,6 +34,7 @@ class ASTReadStringCall extends ASTbuiltInCalls {
             return null;
         } finally {
             scanner.close();
+            
         }
     }
 }
