@@ -1,5 +1,5 @@
 bin/
 graph.dot
 graph.png
-*.jar
+yalc.jar
 tempCodeRunnerFile.*
