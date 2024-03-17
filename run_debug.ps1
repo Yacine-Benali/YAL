@@ -74,7 +74,7 @@ if ($LASTEXITCODE -ne 0) {
 # if AST exists visualize it
 try {
     # check if dot is installed
-    & dot --version > null
+    & dot --version *> $null
     $installed = $true
 } catch {
     # If an error occurs, it likely means the command is not installed
