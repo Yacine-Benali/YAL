@@ -1,7 +1,9 @@
-// Leibniz Formula
-// The Leibniz formula sums an infinite series to calculate π:
+// Estimating π using Leibniz Formula
+// The Leibniz formula sums an infinite series:
 // π = 4 * (1 - 1/3 + 1/5 - 1/7 + 1/9 - 1/11 + ...)
 // calling function isPair within the function estimatePi
+// no built-in % function so I implemented my own
+
 program EstimatePi
 
 function isPair(i:int):bool

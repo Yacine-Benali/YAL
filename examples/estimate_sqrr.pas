@@ -1,8 +1,8 @@
-
 // This a YAL program that calculates the approximate square root of a given number using
 // the Newton-Raphson method. It starts with an initial guess and iteratively refines 
 // it until the approximation is within a specified tolerance level (epsilon). The 
 // main method demonstrates this calculation with an example number.
+// no built-in abs function implemented our own
 
 
 program SqaureRoot
