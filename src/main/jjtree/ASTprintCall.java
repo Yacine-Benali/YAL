@@ -2,22 +2,28 @@
 /* JavaCCOptions:MULTI=true,NODE_USES_PARSER=false,VISITOR=true,TRACK_TOKENS=true,NODE_PREFIX=AST,NODE_EXTENDS=,NODE_FACTORY=,SUPPORT_CLASS_VISIBILITY_PUBLIC=true */
 package main.jjtree;
 
+import java.io.PrintWriter;
+
 public
 class ASTprintCall extends SimpleNode {
-  public ASTprintCall(int id) {
-    super(id);
-  }
+    public ASTprintCall(int id) {
+        super(id);
+    }
 
-  public ASTprintCall(MyGrammar p, int id) {
-    super(p, id);
-  }
+    public ASTprintCall(MyGrammar p, int id) {
+        super(p, id);
+    }
 
 
-  /** Accept the visitor. **/
-  public Object jjtAccept(MyGrammarVisitor visitor, Object data) {
-    Object result = jjtGetChild(0).jjtAccept(visitor,data);
-    System.out.println(result.toString());
-    return visitor.visit(this, data);
-  }
+    /**
+     * Accept the visitor.
+     **/
+    public Object jjtAccept(MyGrammarVisitor visitor, Object data) {
+        String result = jjtGetChild(0).jjtAccept(visitor, data).toString();
+        PrintWriter writer = new PrintWriter(System.out);
+        writer.println(result);
+        writer.flush(); // Flushes the stream
+        return visitor.visit(this, data);
+    }
 }
 /* JavaCC - OriginalChecksum=0a370ad22b6bbfa5729de3c413fcd605 (do not edit this line) */

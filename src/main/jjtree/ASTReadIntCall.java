@@ -28,14 +28,14 @@ class ASTReadIntCall extends ASTbuiltInCalls {
      * Accept the visitor.
      **/
     public Object jjtAccept(MyGrammarVisitor visitor, Object data) {
-        // Create a Scanner object
         Scanner scanner = new Scanner(System.in);
-        try {
-            return scanner.nextInt(); // Attempt to read an integer
-        } catch (InputMismatchException e) {
-            return null;
-        }finally {
-            scanner.close();
+        while (true) {
+            try {
+                return scanner.nextInt(); // Attempt to read an integer
+            } catch (InputMismatchException e) {
+                System.out.println("That's not an integer. Please try again.");
+                scanner.nextLine(); // Clear the invalid input
+            }
         }
     }
 }

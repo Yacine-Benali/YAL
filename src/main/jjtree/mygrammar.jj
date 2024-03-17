@@ -24,6 +24,11 @@ public class MyGrammar/*@bgen(jjtree)*/implements MyGrammarTreeConstants/*@egen*
 
 
     public static void main(String args[]) {
+        // ANSI escape code for red text
+        final String RED = "\u001b[31m";
+        // ANSI escape code to reset the text color
+        final String RESET = "\u001b[0m";
+
         if (args.length != 1) {
             System.out.println("Usage: java MyGrammar <filename>");
             return;
@@ -44,11 +49,12 @@ public class MyGrammar/*@bgen(jjtree)*/implements MyGrammarTreeConstants/*@egen*
             rootNode.jjtAccept(visitor, null); // Starts the visiting process*/
 
         } catch (TokenMgrError e) {
-            System.out.println("Lexical Error: \n" + e.getMessage());
+            System.out.println(RED+"Lexical Error: \n" + e.getMessage()+RESET);
         } catch (ParseException e) {
-            System.out.println("Syntax Error: \n" + e.getMessage());
+            System.out.println(RED+"Syntax Error: \n" + e.getMessage()+RESET);
         } catch ( Throwable t) {
-            System.err.println(t.getMessage());
+            System.err.println(RED+t.getMessage()+RESET);
+            t.printStackTrace();
         }
     }
 }

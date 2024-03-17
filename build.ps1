@@ -36,6 +36,7 @@ jar cfm bin\yalc.jar Manifest.txt -C bin\ .
 # Copy it into ./examples for demo purposes
 cp bin\yalc.jar examples\yalc.jar
 cp bin\yalc.jar examples_error\yalc.jar
+# dot -Tpng $graph1FilePath -o $graph2FilePath
 
 
 
