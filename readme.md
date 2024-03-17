@@ -1,7 +1,7 @@
 # How to use
 1. Clone the repo
 2. Have ``javacc`` ``jjtree`` and optionally `dot` installed
-3. use the Powershell script `build.ps1` to build the compiler it will generate yalc.jar file
+3. use the PowerShell script `build.ps1` to build the compiler it will generate ``yalc.jar`` file
 4. run the compiler on your code using `java -jar yalc.jar yourfile.txt`
 # Basic Introduction to YAL
 
@@ -9,8 +9,8 @@ This README provides a very basic introduction to YAL programming language, cove
 ### Overall Structure
 ```
 program programName
-// function declaration
-// procedure declartion
+// function declaration first (this is enforced)
+// procedure declartion 
 var
 // variables declaration 
 begin 
@@ -108,4 +108,33 @@ end
 
 This will print the numbers from 1 to 5.
 # Semantic Analysis
+We detect most semantic errors, either inside nested operations, like ifs and whiles, or outside them.. For displaying these errors we indicate the line, variable and type of error. Errors we detect range from:
+1. **Function-related Errors:**
+    -  [x] Duplicate functions: Declaring functions with the same name.
+    -  [x] Function type mismatch: Mismatch between declared and actual types in function definitions.
+    -  [ ] Function does not return when it should: this will return null
+    -  [x] Function not declared: Calling a function that hasn't been declared.
+    -  [x] Wrong number of arguments for a function: Incorrect number of parameters passed to a function.
+    -  [x] Wrong type of arguments: Mismatch in the type of arguments passed to a function.
+    -  [x] Return type not declared: Missing declaration of the return type for a function.
+    -  [x] Return type mismatch: Mismatch between the declared and actual return types of a function.
+2. **Argument and Parameter Errors:**
+    -  [x] Undefined arguments: Use of arguments that haven't been defined.
+3. **Variable-related Errors:**
+    -  [x] Type mismatches: Inconsistencies between declared and assigned types of variables.
+    -  [x] Duplicate variables: Declaring variables with the same name.
+    -  [x] Undefined variables: Using variables that haven’t been defined.
 # Limitations 
+- **Variable Types:**
+    Supported variable types are: integer (int), real number (real), string (string), and boolean (boolean).
+- **Variable Declaration:**
+    Declaration of multiple variables in a single line using comma separation is not allowed. 
+    This simplification helps in the implementation of the Abstract Syntax Tree (AST) for variable declarations.
+- **Function Calls in Parameters:**
+    When calling a function, only values or variable names can be used as parameters. Function calls within parameters are not permitted.
+- **Semantic Analysis:**
+    Semantic analysis occurs at runtime. Therefore, functions with semantic errors can be declared without immediate detection. These errors become apparent only when the function is called. This could be improved by implementing separate visitors for semantic analysis and code generation.
+- **Nested Functions and Procedures:**
+    Nested functions and procedures are not allowed.
+- **Function Calls in Expressions:**
+    Functions cannot be called within arithmetic expressions

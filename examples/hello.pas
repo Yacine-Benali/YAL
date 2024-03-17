@@ -1,11 +1,12 @@
 program Test
-procedure greet(name:string)
+function greet():string
 begin
-    print("hello, " + name);
+    Result:="5";
 end
 
 var 
 x:string;
 begin
-greet("yacine");
+y:=greet("yacine");
+print(x);
 end
