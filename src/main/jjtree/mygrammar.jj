@@ -1416,12 +1416,7 @@ void AdditiveExpression() :
 {/*@bgen(jjtree) AdditiveExpression */
   try {
 /*@egen*/
-  MultiplicativeExpression()
-  (
-  ( t=<PLUS> |  t=<MINUS>)
-  (LOOKAHEAD(2) AdditiveExpression() | LOOKAHEAD(2) MultiplicativeExpression() )
-  {jjtn000.operator = t.image;}
-  )*/*@bgen(jjtree)*/
+  MultiplicativeExpression() (( t=<PLUS> |  t=<MINUS>) MultiplicativeExpression(){jjtn000.operator = t.image;})*/*@bgen(jjtree)*/
   } catch (Throwable jjte000) {
     if (jjtc000) {
       jjtree.clearNodeScope(jjtn000);
@@ -1456,11 +1451,7 @@ void MultiplicativeExpression() :
 {/*@bgen(jjtree) MultiplicativeExpression */
   try {
 /*@egen*/
-  UnaryExpression() (
-  ( t=<MULTIPLY> |  t=<DIVIDE> )
-  (LOOKAHEAD(2) MultiplicativeExpression() | LOOKAHEAD(2) UnaryExpression())
-  {jjtn000.operator = t.image;}
-  )*/*@bgen(jjtree)*/
+  UnaryExpression() (( t=<MULTIPLY> |  t=<DIVIDE> ) UnaryExpression(){jjtn000.operator = t.image;})*/*@bgen(jjtree)*/
   } catch (Throwable jjte000) {
     if (jjtc000) {
       jjtree.clearNodeScope(jjtn000);

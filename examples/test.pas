@@ -6,7 +6,9 @@ b:int;
 c:real;
 d:real;
 begin
-print(1+1-1);
-print(5*5/5);
+a:= 5;
+c:= 5.0;
+d := a+c;
+print(true + 4);
 
 end
