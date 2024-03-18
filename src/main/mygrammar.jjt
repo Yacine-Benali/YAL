@@ -50,7 +50,7 @@ public class MyGrammar {
             System.out.println(RED+"Syntax Error: \n" + e.getMessage()+RESET);
         } catch ( Throwable t) {
             System.err.println(RED+t.getMessage()+RESET);
-            t.printStackTrace();
+            //t.printStackTrace();
         }
     }
 }
@@ -450,15 +450,7 @@ void N() :
   varName=variableIdentifier() {jjtThis.isVariable = true;jjtThis.variableName=varName;}
 
 
-
 }
-//void NPrime() :
-//{ Token t;}
-//{
-//    Expression()
-//}
-
-
 
 void LiteralExpression() :
 {Token e;}
@@ -470,7 +462,6 @@ void LiteralExpression() :
     e=<STRING> {jjtThis.setValue(e.image); }
     |
     e=<BOOL> {jjtThis.setValue(e.image); }
-
 
 
 }

@@ -41,7 +41,7 @@ public class MyGrammar/*@bgen(jjtree)*/implements MyGrammarTreeConstants, MyGram
             System.out.println(RED+"Syntax Error: \n" + e.getMessage()+RESET);
         } catch ( Throwable t) {
             System.err.println(RED+t.getMessage()+RESET);
-            t.printStackTrace();
+            //t.printStackTrace();
         }
     }
 
@@ -1709,15 +1709,7 @@ if (jjtc000) {
     }
 }
 
-//void NPrime() :
-//{ Token t;}
-//{
-//    Expression()
-//}
-  final public 
-
-
-void LiteralExpression() throws ParseException {/*@bgen(jjtree) LiteralExpression */
+  final public void LiteralExpression() throws ParseException {/*@bgen(jjtree) LiteralExpression */
  ASTLiteralExpression jjtn000 = new ASTLiteralExpression(JJTLITERALEXPRESSION);
  boolean jjtc000 = true;
  jjtree.openNodeScope(jjtn000);
@@ -1920,7 +1912,7 @@ if (jjtc000) {
 
   private boolean jj_3_3()
  {
-    if (jj_3R_functionCall_482_5_16()) return true;
+    if (jj_3R_functionCall_473_5_16()) return true;
     return false;
   }
 
@@ -1933,6 +1925,13 @@ if (jjtc000) {
   private boolean jj_3R_identifier_358_5_20()
  {
     if (jj_scan_token(IDENTIFIER)) return true;
+    return false;
+  }
+
+  private boolean jj_3R_functionCall_473_5_16()
+ {
+    if (jj_3R_identifier_358_5_20()) return true;
+    if (jj_3R_actualParameterList_480_5_21()) return true;
     return false;
   }
 
@@ -1959,12 +1958,6 @@ if (jjtc000) {
     return false;
   }
 
-  private boolean jj_3R_actualParameterList_489_5_21()
- {
-    if (jj_scan_token(LPAREN)) return true;
-    return false;
-  }
-
   private boolean jj_3R_builtInCalls_302_5_15()
  {
     Token xsp;
@@ -1988,13 +1981,6 @@ if (jjtc000) {
     return false;
   }
 
-  private boolean jj_3R_functionCall_482_5_16()
- {
-    if (jj_3R_identifier_358_5_20()) return true;
-    if (jj_3R_actualParameterList_489_5_21()) return true;
-    return false;
-  }
-
   private boolean jj_3_1()
  {
     if (jj_3R_assignmentStatement_290_4_14()) return true;
@@ -2015,6 +2001,12 @@ if (jjtc000) {
     jj_scanpos = xsp;
     if (jj_3R_variableIdentifier_365_7_23()) return true;
     }
+    return false;
+  }
+
+  private boolean jj_3R_actualParameterList_480_5_21()
+ {
+    if (jj_scan_token(LPAREN)) return true;
     return false;
   }
 

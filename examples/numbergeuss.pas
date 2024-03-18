@@ -3,7 +3,7 @@ var
     number:int;
     geuss:int;
 begin
-    number:=45;
+    number:=69;
     geuss :=0;
     while geuss != number do
     begin
