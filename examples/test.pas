@@ -1,14 +1,15 @@
 program Test
-
 var
 a:int;
 b:int;
-c:real;
-d:real;
+c:int;
+d:int;
 begin
 a:= 5;
-c:= 5.0;
-d := a+c;
-print(true + 4);
+b:= 5;
+c:=5;
+d := 5;
+d := a+b+c+d*2;
+print(d);
 
 end

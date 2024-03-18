@@ -5,6 +5,7 @@ package main.jjtree;
 import main.Exceptions.TypeError;
 import main.SemanticHelper;
 
+import java.io.ObjectStreamException;
 import java.util.Objects;
 
 public
@@ -26,6 +27,8 @@ class ASTExpression extends SimpleNode {
      * Accept the visitor.
      **/
     public Object jjtAccept(MyGrammarVisitor visitor, Object data) {
+        // c12 excute c1,c2
+        // if there is another
         Object result = execute(visitor, data);
         return result;
     }
@@ -33,35 +36,35 @@ class ASTExpression extends SimpleNode {
 
     public Object UnaryExpression(MyGrammarVisitor visitor, Object data) {
 
-        Object res = this.jjtGetChild(0).jjtAccept(visitor, data);
+        Object res1 = this.jjtGetChild(0).jjtAccept(visitor, data);
+
         if (operator == null) {
             // either function call
             // eithe variableid
             // either literalExpression
 
-            return res;
+            return res1;
         }
-        int type1 = SemanticHelper.getType(res);
+        int type1 = SemanticHelper.getType(res1);
         if (operator.equals("!")) {
-            res = SemanticHelper.getSolve(res);
-            res = !((Boolean) res);
+            res1 = SemanticHelper.getSolve(res1);
+            res1 = !((Boolean) res1);
         } else if (operator.equals("-")) {
-            int resType = SemanticHelper.getType(res);
+            int resType = SemanticHelper.getType(res1);
             if (resType == 0) {
-                res = -(int) res;
+                res1 = -(int) res1;
             } else if (resType == 1) {
-                res = -(double) res;
+                res1 = -(double) res1;
             } else {
                 String error = String.format("Unsupported operation %s on type '%s'",
                         operator, SemanticHelper.getStringFromIntType(resType));
                 throw new TypeError(this.firstToken, error);
             }
         }
-        return res;
+        return res1;
     }
 
     private void throwTypeError(int type1, int type2) {
-
         String type1String = SemanticHelper.getStringFromIntType(type1);
         String type2String = SemanticHelper.getStringFromIntType(type2);
         String error = String.format("Unsupported operation %s between types '%s' and '%s'",
@@ -70,11 +73,26 @@ class ASTExpression extends SimpleNode {
     }
 
     public Object execute(MyGrammarVisitor visitor, Object data) {
-        if (isUnary || children.length == 1) {
+        if (isUnary) {
             return UnaryExpression(visitor, data);
         }
         Object d1 = this.jjtGetChild(0).jjtAccept(visitor, data);
-        Object d2 = this.jjtGetChild(1).jjtAccept(visitor, data);
+        if (this.children.length == 1) {
+            return d1;
+        }
+        Object res = d1;
+
+        for (int i = 1; i < this.children.length; i++) {
+            Object d2 = this.jjtGetChild(i).jjtAccept(visitor, data);
+            res = execute2(visitor, data, res, d2);
+
+
+        }
+        return res;
+    }
+
+    public Object execute2(MyGrammarVisitor visitor, Object data, Object d1, Object d2) {
+
 
         int type1 = SemanticHelper.getType(d1);
         int type2 = SemanticHelper.getType(d2);
@@ -285,7 +303,7 @@ class ASTExpression extends SimpleNode {
                     if (type2 == 0) throwTypeError(type1, type2);
                     if (type2 == 1) throwTypeError(type1, type2);
                     if (type2 == 2) throwTypeError(type1, type2);
-                    if (type2 == 3) res = (Boolean) d1  == (Boolean) d2;
+                    if (type2 == 3) res = (Boolean) d1 == (Boolean) d2;
                 }
                 return res;
             case "!=":
@@ -312,7 +330,7 @@ class ASTExpression extends SimpleNode {
                     if (type2 == 0) throwTypeError(type1, type2);
                     if (type2 == 1) throwTypeError(type1, type2);
                     if (type2 == 2) throwTypeError(type1, type2);
-                    if (type2 == 3) res = (Boolean) d1  != (Boolean) d2;
+                    if (type2 == 3) res = (Boolean) d1 != (Boolean) d2;
                 }
                 return res;
 

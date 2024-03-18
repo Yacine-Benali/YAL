@@ -73,7 +73,7 @@ To use a procedure, you simply call it by its name followed by parentheses. If t
 
 ```
 begin     
-DisplayGreeting('Alice'); 
+DisplayGreeting("Alice"); 
 end
 ```
 ### If Statement
@@ -108,7 +108,7 @@ begin
 	count := 1;     
 	while count <= 5 do     
 	begin         
-		print('Count: ', count);
+		print('Count: '+ count);
 		count := count + 1;
 	end
 end
