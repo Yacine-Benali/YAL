@@ -32,10 +32,13 @@ if ($LASTEXITCODE -ne 0) {
 }
 # Build one JAR file
 jar cfm bin\yalc.jar Manifest.txt -C bin\ .
+cp bin\yalc.jar .
 
 # Copy it into ./examples for demo purposes
-cp bin\yalc.jar examples\yalc.jar
-cp bin\yalc.jar examples_error\yalc.jar
+# cp bin\yalc.jar examples\yalc.jar
+# cp bin\yalc.jar examples_error\yalc.jar
+# cp bin\yalc.jar test_cases_errors\yalc.jar
+
 # dot -Tpng $graph1FilePath -o $graph2FilePath
 
 
